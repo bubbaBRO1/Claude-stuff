@@ -157,3 +157,89 @@ body {
 
 /* Safe area for mobile bottom nav */
 .pb-safe { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
+
+/* Glassmorphism card */
+.card-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+}
+[data-theme="light"] .card-glass {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+/* Gradient border card */
+.card-gradient-border {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: 1rem;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+.card-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 1rem;
+  background: var(--gradient);
+  z-index: -1;
+  opacity: 0.5;
+}
+
+/* Skeleton loading */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.skeleton {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.05) 25%,
+    rgba(255,255,255,0.1) 50%,
+    rgba(255,255,255,0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
+}
+[data-theme="light"] .skeleton {
+  background: linear-gradient(90deg,
+    rgba(139,92,246,0.05) 25%,
+    rgba(139,92,246,0.12) 50%,
+    rgba(139,92,246,0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* XP popup float-up */
+@keyframes xp-float {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-60px) scale(1.1); }
+}
+.animate-xp-float { animation: xp-float 1.2s ease-out forwards; }
+
+/* Level-up badge pulse */
+@keyframes level-badge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+.animate-level-badge { animation: level-badge 1.5s ease-in-out infinite; }
+
+/* Gradient hero */
+.hero-gradient {
+  background: linear-gradient(135deg,
+    rgba(139, 92, 246, 0.15) 0%,
+    rgba(236, 72, 153, 0.1) 50%,
+    rgba(16, 185, 129, 0.08) 100%
+  );
+}
+
+/* Tab active indicator */
+.tab-active {
+  background: var(--gradient);
+  border-radius: 9999px;
+}

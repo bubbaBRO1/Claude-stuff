@@ -1,6 +1,8 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
 import PageHeader from '../../components/layout/PageHeader';
+import { useToast } from '../../components/layout/ToastProvider';
+import { XP_REWARDS } from '../../lib/xp';
 
 interface JournalEntry {
   id: string;
@@ -13,6 +15,7 @@ interface JournalEntry {
 const MOOD_LABELS = ['', '😞', '😕', '😐', '🙂', '😁'];
 
 export default function JournalPage() {
+  const { toast } = useToast();
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [adding, setAdding] = useState(false);
   const [imageData, setImageData] = useState('');
@@ -62,6 +65,13 @@ export default function JournalPage() {
     });
     const entry = await res.json();
     setEntries(prev => [entry, ...prev]);
+    // Award XP for journal entry
+    await fetch('/api/xp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: XP_REWARDS.journal, reason: 'journal' }),
+    });
+    toast(`Journal entry saved! +${XP_REWARDS.journal} XP 📸`, 'xp');
     setAdding(false);
     setImageData('');
     setNote('');

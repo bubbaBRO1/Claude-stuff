@@ -3,6 +3,8 @@ import { prisma } from './lib/db';
 import { getOrCreateSession } from './lib/session';
 import { calcStreak, toDateKey } from './lib/streak';
 import { getDailyAffirmation } from './lib/affirmations';
+import { XPBreakdown } from './components/home/XPBreakdown';
+import { DailyGoals } from './components/home/DailyGoals';
 
 export default async function HomePage() {
   const sessionId = await getOrCreateSession();
@@ -25,10 +27,18 @@ export default async function HomePage() {
     where: { habit: { sessionId }, dateKey: today },
   });
 
+  const todaySleep = await prisma.sleepLog.findUnique({
+    where: { sessionId_dateKey: { sessionId, dateKey: today } },
+  });
+  const todayWater = await prisma.waterLog.findUnique({
+    where: { sessionId_dateKey: { sessionId, dateKey: today } },
+  });
+
   const affirmation = getDailyAffirmation();
 
   return (
     <div className="space-y-5 pb-4">
+      {/* Header */}
       <div className="flex items-center justify-between pt-2">
         <div>
           <h1 className="text-2xl font-bold gradient-text">GlowUp ✨</h1>
@@ -36,12 +46,17 @@ export default async function HomePage() {
             {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
         </div>
-        <Link href="/scan" className="btn-primary px-4 py-2 text-sm">Scan Face</Link>
+        <div className="flex items-center gap-2">
+          <Link href="/settings" className="w-9 h-9 rounded-xl flex items-center justify-center text-lg" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+            ⚙️
+          </Link>
+          <Link href="/scan" className="btn-primary px-4 py-2 text-sm">Scan Face</Link>
+        </div>
       </div>
 
+      {/* Affirmation */}
       <div
-        className="card p-4"
-        style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(236,72,153,0.06))' }}
+        className="card p-4 hero-gradient"
       >
         <p className="text-xs mb-1 font-medium" style={{ color: 'var(--accent)' }}>💬 Today&apos;s Affirmation</p>
         <p className="text-sm italic leading-relaxed" style={{ color: 'var(--text-primary)' }}>
@@ -49,6 +64,10 @@ export default async function HomePage() {
         </p>
       </div>
 
+      {/* XP Breakdown */}
+      <XPBreakdown />
+
+      {/* Stats grid */}
       <div className="grid grid-cols-2 gap-3">
         <Link href="/routine" className="card p-4 space-y-2 block">
           <div className="flex items-center gap-2">
@@ -76,6 +95,31 @@ export default async function HomePage() {
           </p>
         </Link>
 
+        {/* Sleep & Water mini stats */}
+        <Link href="/health" className="card p-3 space-y-1 block">
+          <div className="flex items-center gap-1.5">
+            <span className="text-lg">😴</span>
+            <div>
+              <p className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>
+                {todaySleep ? `${todaySleep.hours}h` : '—'}
+              </p>
+              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Sleep</p>
+            </div>
+          </div>
+        </Link>
+
+        <Link href="/health" className="card p-3 space-y-1 block">
+          <div className="flex items-center gap-1.5">
+            <span className="text-lg">💧</span>
+            <div>
+              <p className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>
+                {todayWater ? `${todayWater.glasses}/8` : '0/8'}
+              </p>
+              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Water</p>
+            </div>
+          </div>
+        </Link>
+
         {latestAnalysis && (
           <Link href={`/scan/results/${latestAnalysis.id}`} className="card p-4 space-y-2 block col-span-2">
             <div className="flex items-center justify-between">
@@ -97,13 +141,19 @@ export default async function HomePage() {
         )}
       </div>
 
+      {/* Daily Goals */}
+      <DailyGoals />
+
+      {/* Quick Actions */}
       <div>
         <h2 className="font-bold mb-3" style={{ color: 'var(--text-primary)' }}>Quick Actions</h2>
         <div className="space-y-2">
           {[
             { href: '/scan', icon: '📷', title: 'Scan Your Face', sub: 'Get your appearance rating + tips', color: '#8b5cf6' },
             { href: '/routine', icon: '☀️', title: 'Morning Routine', sub: completedToday ? 'Completed today ✓' : 'Start your day right', color: '#f59e0b' },
-            { href: '/confidence', icon: '💪', title: 'Confidence Hub', sub: 'Habits, affirmations, journal', color: '#10b981' },
+            { href: '/focus', icon: '🧠', title: 'Focus Timer', sub: 'Deep work + earn XP', color: '#3b82f6' },
+            { href: '/health', icon: '🏥', title: 'Health Tracker', sub: 'Sleep, water & wellness', color: '#10b981' },
+            { href: '/achievements', icon: '🏆', title: 'Achievements', sub: 'Unlock badges and rewards', color: '#f59e0b' },
             { href: '/shop', icon: '🛍️', title: 'Product Shop', sub: 'Curated upgrades for you', color: '#ec4899' },
           ].map(item => (
             <Link

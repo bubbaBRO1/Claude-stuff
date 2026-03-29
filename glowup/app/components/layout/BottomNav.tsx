@@ -1,13 +1,14 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion';
 
 const NAV = [
   { href: '/', icon: '🏠', label: 'Home' },
   { href: '/scan', icon: '📷', label: 'Scan' },
   { href: '/routine', icon: '☀️', label: 'Routine' },
+  { href: '/focus', icon: '🧠', label: 'Focus' },
   { href: '/confidence', icon: '💪', label: 'Grow' },
-  { href: '/shop', icon: '🛍️', label: 'Shop' },
 ];
 
 export default function BottomNav() {
@@ -30,15 +31,22 @@ export default function BottomNav() {
           <Link
             key={n.href}
             href={n.href}
-            className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all"
+            className="relative flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors"
             style={{
               color: active ? 'var(--accent)' : 'var(--text-muted)',
-              background: active ? 'var(--bg-card)' : 'transparent',
-              minWidth: 56,
+              minWidth: 52,
             }}
           >
-            <span className="text-xl">{n.icon}</span>
-            <span className="text-[10px] font-medium">{n.label}</span>
+            {active && (
+              <motion.div
+                layoutId="nav-pill"
+                className="absolute inset-0 rounded-xl"
+                style={{ background: 'var(--bg-card)' }}
+                transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+              />
+            )}
+            <span className="relative text-xl">{n.icon}</span>
+            <span className="relative text-[10px] font-medium">{n.label}</span>
           </Link>
         );
       })}

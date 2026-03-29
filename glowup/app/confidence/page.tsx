@@ -4,10 +4,13 @@ import Link from 'next/link';
 import PageHeader from '../components/layout/PageHeader';
 import AffirmationCard from '../components/confidence/AffirmationCard';
 import HabitRow from '../components/confidence/HabitRow';
+import { useToast } from '../components/layout/ToastProvider';
+import { XP_REWARDS } from '../lib/xp';
 import type { Habit } from '../types/habit';
 import { HABIT_CATEGORIES } from '../types/habit';
 
 export default function ConfidencePage() {
+  const { toast } = useToast();
   const [habits, setHabits] = useState<(Habit & { completedToday: boolean })[]>([]);
   const [adding, setAdding] = useState(false);
   const [newName, setNewName] = useState('');
@@ -18,8 +21,30 @@ export default function ConfidencePage() {
     fetch('/api/habits').then(r => r.json()).then(setHabits);
   }, []);
 
-  const handleUpdate = (id: string, completed: boolean) => {
-    setHabits(prev => prev.map(h => h.id === id ? { ...h, completedToday: completed } : h));
+  const handleUpdate = async (id: string, completed: boolean) => {
+    setHabits(prev => {
+      const updated = prev.map(h => h.id === id ? { ...h, completedToday: completed } : h);
+      if (completed) {
+        // Check if all habits are now completed
+        const allDone = updated.every(h => h.completedToday);
+        // Award XP async
+        fetch('/api/xp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: XP_REWARDS.habit_check, reason: 'habit_check' }),
+        });
+        toast(`Habit done! +${XP_REWARDS.habit_check} XP ⚡`, 'xp');
+        if (allDone && updated.length > 0) {
+          fetch('/api/xp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount: XP_REWARDS.all_habits, reason: 'all_habits' }),
+          });
+          setTimeout(() => toast(`All habits complete! +${XP_REWARDS.all_habits} XP bonus! 🎯`, 'xp'), 500);
+        }
+      }
+      return updated;
+    });
   };
 
   const addHabit = async () => {

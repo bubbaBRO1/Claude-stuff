@@ -4,9 +4,12 @@ import Link from 'next/link';
 import PageHeader from '../components/layout/PageHeader';
 import StepTimer from '../components/routine/StepTimer';
 import StreakBadge from '../components/routine/StreakBadge';
+import { useToast } from '../components/layout/ToastProvider';
+import { XP_REWARDS } from '../lib/xp';
 import type { RoutineWithStreak } from '../types/routine';
 
 export default function RoutinePage() {
+  const { toast } = useToast();
   const [routine, setRoutine] = useState<RoutineWithStreak | null>(null);
   const [checked, setChecked] = useState<Set<string>>(new Set());
   const [activeTimer, setActiveTimer] = useState<string | null>(null);
@@ -45,6 +48,13 @@ export default function RoutinePage() {
     setCompleted(true);
     setConfetti(true);
     setRoutine(prev => prev ? { ...prev, streak: data.streak, completedToday: true } : prev);
+    // Award XP
+    await fetch('/api/xp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: XP_REWARDS.routine_complete, reason: 'routine_complete' }),
+    });
+    toast(`Morning Routine done! +${XP_REWARDS.routine_complete} XP ⚡`, 'xp');
     // Trigger confetti
     const confettiLib = (await import('canvas-confetti')).default;
     confettiLib({ particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#8b5cf6', '#ec4899', '#f59e0b'] });

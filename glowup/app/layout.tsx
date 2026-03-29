@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import BottomNav from "./components/layout/BottomNav";
 import ThemeProvider from "./components/layout/ThemeProvider";
+import { ToastProvider } from "./components/layout/ToastProvider";
 
 export const metadata: Metadata = {
   title: "GlowUp — Look Your Best",
@@ -22,10 +23,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="min-h-screen antialiased" style={{ background: "var(--bg-primary)", color: "var(--text-primary)" }}>
         <ThemeProvider>
-          <main className="max-w-lg mx-auto px-4 pb-safe pt-4 min-h-screen">
-            {children}
-          </main>
-          <BottomNav />
+          <ToastProvider>
+            <main className="max-w-lg mx-auto px-4 pb-safe pt-4 min-h-screen">
+              {children}
+            </main>
+            <BottomNav />
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

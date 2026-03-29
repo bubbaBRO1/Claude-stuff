@@ -11,10 +11,16 @@ model Session {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
-  analyses Analysis[]
-  routines Routine[]
-  habits   Habit[]
-  journal  JournalEntry[]
+  analyses      Analysis[]
+  routines      Routine[]
+  habits        Habit[]
+  journal       JournalEntry[]
+  goals         Goal[]
+  focusSessions FocusSession[]
+  sleepLogs     SleepLog[]
+  waterLogs     WaterLog[]
+  weeklyReviews WeeklyReview[]
+  xpLogs        XPLog[]
 }
 
 model Analysis {
@@ -98,6 +104,77 @@ model JournalEntry {
   imageData String
   note      String?
   mood      Int?
+
+  @@index([sessionId])
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  sessionId   String
+  session     Session  @relation(fields: [sessionId], references: [id])
+  text        String
+  dateKey     String
+  completed   Boolean  @default(false)
+  carriedOver Boolean  @default(false)
+
+  @@index([sessionId, dateKey])
+}
+
+model FocusSession {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  sessionId   String
+  session     Session   @relation(fields: [sessionId], references: [id])
+  durationMin Int
+  type        String    @default("work")
+  completedAt DateTime?
+
+  @@index([sessionId])
+}
+
+model SleepLog {
+  id        String  @id @default(cuid())
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id])
+  dateKey   String
+  hours     Float
+  quality   Int
+
+  @@unique([sessionId, dateKey])
+  @@index([sessionId])
+}
+
+model WaterLog {
+  id        String  @id @default(cuid())
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id])
+  dateKey   String
+  glasses   Int     @default(0)
+
+  @@unique([sessionId, dateKey])
+  @@index([sessionId])
+}
+
+model WeeklyReview {
+  id        String  @id @default(cuid())
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id])
+  weekKey   String
+  rating    Int
+  note      String?
+
+  @@unique([sessionId, weekKey])
+  @@index([sessionId])
+}
+
+model XPLog {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  sessionId String
+  session   Session  @relation(fields: [sessionId], references: [id])
+  amount    Int
+  reason    String
 
   @@index([sessionId])
 }

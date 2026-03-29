@@ -1,6 +1,7 @@
 'use client';
 import * as faceapi from 'face-api.js';
 import { scoreLandmarks, calcOverallScore, calcPotentialScore, generateSummary } from '../../lib/faceScoring';
+import { XP_REWARDS } from '../../lib/xp';
 import type { FaceAnalysis } from '../../types/analysis';
 
 let modelsLoaded = false;
@@ -47,6 +48,47 @@ export async function analyzeImage(imageDataUrl: string): Promise<FaceAnalysis |
     body: JSON.stringify({ overallScore, potentialScore, featuresJson: features, summary }),
   });
   const saved = await res.json();
+
+  // Award XP for scan
+  await fetch('/api/xp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount: XP_REWARDS.scan, reason: 'scan' }),
+  });
+
+  // Check for score improvement vs previous scan and award bonus
+  try {
+    const histRes = await fetch('/api/analysis');
+    const histData = await histRes.json();
+    const analysesList = Array.isArray(histData) ? histData : (histData.analyses ?? []);
+    if (analysesList.length >= 2) {
+      const sorted = [...analysesList].sort(
+        (a: { createdAt: string }, b: { createdAt: string }) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+      const prev = sorted[sorted.length - 2] as { overallScore: number };
+      if (overallScore >= prev.overallScore + 1) {
+        await fetch('/api/xp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: XP_REWARDS.scan_improvement, reason: 'scan_improvement' }),
+        });
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  // Store weakest feature tags for "For You" shop recommendations
+  const weakestTags = [...features]
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3)
+    .map(f => f.key.toLowerCase());
+  try {
+    localStorage.setItem('glowup_weak_tags', JSON.stringify(weakestTags));
+  } catch {
+    // ignore
+  }
 
   return {
     id: saved.id,
