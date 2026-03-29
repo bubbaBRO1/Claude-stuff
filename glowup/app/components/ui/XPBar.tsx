@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { levelTitle } from '../../lib/xp';
+import { getRank, getNextRank } from '../../lib/xp';
 
 interface XPBarProps {
   level: number;
@@ -15,28 +15,31 @@ export function XPBar({ level, currentXP, xpNeeded, progress }: XPBarProps) {
   const [animated, setAnimated] = useState(false);
   useEffect(() => { setAnimated(true); }, []);
 
+  const rank = getRank(level);
+  const next = getNextRank(level);
+
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span
-            className="text-xs font-bold px-2 py-0.5 rounded-full"
-            style={{ background: 'var(--gradient)', color: 'white' }}
+            className={`rank-badge ${rank.cssClass}`}
+            style={{ fontSize: '10px' }}
           >
-            Lv.{level}
+            {rank.icon} Lv.{level}
           </span>
-          <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>
-            {levelTitle(level)}
+          <span className="text-xs font-semibold" style={{ color: rank.color }}>
+            {rank.name}
           </span>
         </div>
-        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+        <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
           {currentXP}/{xpNeeded} XP
         </span>
       </div>
-      <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(139,92,246,0.15)' }}>
+      <div className="progress-bar" style={{ height: 5 }}>
         <motion.div
           className="h-full rounded-full"
-          style={{ background: 'var(--gradient)' }}
+          style={{ background: `linear-gradient(90deg, ${rank.color}, ${next?.color ?? rank.color})` }}
           initial={{ width: 0 }}
           animate={{ width: animated ? `${progress * 100}%` : 0 }}
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
