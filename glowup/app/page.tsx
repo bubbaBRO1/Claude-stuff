@@ -1,13 +1,28 @@
 import Link from 'next/link';
 import { prisma } from './lib/db';
-import { getOrCreateSession } from './lib/session';
+import { getSessionId } from './lib/session';
 import { calcStreak, toDateKey } from './lib/streak';
 import { getDailyAffirmation } from './lib/affirmations';
 import { XPBreakdown } from './components/home/XPBreakdown';
 import { DailyGoals } from './components/home/DailyGoals';
+import { SessionInit } from './components/home/SessionInit';
 
 export default async function HomePage() {
-  const sessionId = await getOrCreateSession();
+  const sessionId = await getSessionId();
+
+  // No session yet — show welcome + init session via client component
+  if (!sessionId) {
+    return (
+      <div className="space-y-6 py-8 text-center">
+        <div className="text-6xl animate-float">✨</div>
+        <h1 className="text-3xl font-black gradient-text">Welcome to GlowUp</h1>
+        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+          AI face analysis, daily routines, productivity tools, and XP gamification to help you look and feel your best.
+        </p>
+        <SessionInit />
+      </div>
+    );
+  }
 
   const latestAnalysis = await prisma.analysis.findFirst({
     where: { sessionId },
