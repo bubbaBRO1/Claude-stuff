@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  analyses Analysis[]
+  routines Routine[]
+  habits   Habit[]
+  journal  JournalEntry[]
+}
+
+model Analysis {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  sessionId      String
+  session        Session  @relation(fields: [sessionId], references: [id])
+  overallScore   Float
+  potentialScore Float
+  featuresJson   String
+  summary        String
+
+  @@index([sessionId])
+}
+
+model Routine {
+  id        String        @id @default(cuid())
+  createdAt DateTime      @default(now())
+  sessionId String
+  session   Session       @relation(fields: [sessionId], references: [id])
+  name      String        @default("Morning Routine")
+  steps     RoutineStep[]
+  logs      RoutineLog[]
+
+  @@index([sessionId])
+}
+
+model RoutineStep {
+  id          String  @id @default(cuid())
+  routineId   String
+  routine     Routine @relation(fields: [routineId], references: [id], onDelete: Cascade)
+  order       Int
+  title       String
+  icon        String  @default("✓")
+  durationSec Int     @default(0)
+  isActive    Boolean @default(true)
+
+  @@index([routineId])
+}
+
+model RoutineLog {
+  id          String   @id @default(cuid())
+  completedAt DateTime @default(now())
+  routineId   String
+  routine     Routine  @relation(fields: [routineId], references: [id], onDelete: Cascade)
+  dateKey     String
+
+  @@unique([routineId, dateKey])
+  @@index([routineId])
+}
+
+model Habit {
+  id        String     @id @default(cuid())
+  createdAt DateTime   @default(now())
+  sessionId String
+  session   Session    @relation(fields: [sessionId], references: [id])
+  name      String
+  icon      String     @default("⭐")
+  category  String     @default("general")
+  isActive  Boolean    @default(true)
+  logs      HabitLog[]
+
+  @@index([sessionId])
+}
+
+model HabitLog {
+  id      String @id @default(cuid())
+  habitId String
+  habit   Habit  @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  dateKey String
+
+  @@unique([habitId, dateKey])
+  @@index([habitId])
+}
+
+model JournalEntry {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  sessionId String
+  session   Session  @relation(fields: [sessionId], references: [id])
+  imageData String
+  note      String?
+  mood      Int?
+
+  @@index([sessionId])
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  category    String
+  priceMin    Float
+  priceMax    Float
+  imageEmoji  String  @default("🛍️")
+  tags        String
+  buyUrl      String  @default("#")
+}
