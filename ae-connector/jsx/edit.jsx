@@ -24,16 +24,27 @@ function getProjectInfo() {
         else if (l instanceof ShapeLayer) type = "Shape";
         else if (l instanceof AVLayer)    type = (l.source instanceof FootageItem) ? "Footage" : "Comp";
 
+        // Collect effect names (capped at 8 to keep JSON lean)
+        var effectNames = [];
+        try {
+            var fx = l("Effects");
+            for (var e = 1; e <= Math.min(fx.numProperties, 8); e++) {
+                effectNames.push(fx.property(e).name);
+            }
+        } catch (ex) {}
+
         layers.push({
-            index:    i,
-            name:     l.name,
-            type:     type,
-            inPoint:  Math.round(l.inPoint  * 100) / 100,
-            outPoint: Math.round(l.outPoint * 100) / 100,
-            duration: Math.round((l.outPoint - l.inPoint) * 100) / 100,
-            selected: l.selected,
-            hasVideo: (l instanceof AVLayer) ? l.hasVideo : false,
-            hasAudio: (l instanceof AVLayer) ? l.hasAudio : false
+            index:      i,
+            name:       l.name,
+            type:       type,
+            inPoint:    Math.round(l.inPoint  * 100) / 100,
+            outPoint:   Math.round(l.outPoint * 100) / 100,
+            duration:   Math.round((l.outPoint - l.inPoint) * 100) / 100,
+            selected:   l.selected,
+            hasVideo:   (l instanceof AVLayer) ? l.hasVideo : false,
+            hasAudio:   (l instanceof AVLayer) ? l.hasAudio : false,
+            effects:    effectNames,
+            motionBlur: (l.motionBlur !== undefined) ? l.motionBlur : false
         });
     }
 

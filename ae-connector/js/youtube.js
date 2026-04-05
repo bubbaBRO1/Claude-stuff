@@ -133,10 +133,44 @@
     return /youtube\.com|youtu\.be/.test(str);
   }
 
+  /**
+   * Known "style reference" video URLs for each built-in creator.
+   * Fill these in with the creator's best technique tutorial video.
+   * Users can also use "match <youtube-url>" directly to override.
+   *
+   * To find a video ID: go to the creator's YouTube channel, find their
+   * most technique-focused tutorial, copy the v= ID from the URL.
+   */
+  var CREATOR_STYLE_URLS = {
+    xrh4:     null,   // e.g. 'https://www.youtube.com/watch?v=XXXXXXXXXX'
+    kjohn24:  null,   // e.g. 'https://www.youtube.com/watch?v=XXXXXXXXXX'
+    gulovsky: null,   // e.g. 'https://www.youtube.com/watch?v=XXXXXXXXXX'
+  };
+
+  /**
+   * Fetch style context for a creator from their seeded video URL.
+   * Returns { combinedText, title } or null if no URL is set or fetch fails.
+   *
+   * @param {string} creatorKey  - one of "xrh4", "kjohn24", "gulovsky"
+   * @returns {Promise<{combinedText, title}|null>}
+   */
+  async function getCreatorStyleContext(creatorKey) {
+    var url = CREATOR_STYLE_URLS[creatorKey];
+    if (!url) return null;
+    try {
+      var info = await getVideoInfo(url);
+      return info.title ? info : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   global.YouTubeClient = {
-    getTranscript: getTranscript,
-    getVideoInfo: getVideoInfo,
-    isYouTubeUrl: isYouTubeUrl,
+    getTranscript:          getTranscript,
+    getVideoInfo:           getVideoInfo,
+    getCreatorStyleContext: getCreatorStyleContext,
+    isYouTubeUrl:           isYouTubeUrl,
+    CREATOR_STYLE_URLS:     CREATOR_STYLE_URLS,
   };
 
 })(window);
