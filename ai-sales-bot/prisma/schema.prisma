@@ -1,0 +1,57 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../app/generated/prisma"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Lead {
+  id         String     @id @default(cuid())
+  name       String
+  phone      String?
+  email      String?
+  company    String?
+  industry   String?
+  tags       String     @default("[]")
+  status     String     @default("new")
+  notes      String?
+  source     String?
+  createdAt  DateTime   @default(now())
+  deliveries Delivery[]
+}
+
+model Campaign {
+  id             String     @id @default(cuid())
+  name           String
+  industry       String?
+  originalPrompt String
+  enhancedPrompt String
+  subject        String?
+  status         String     @default("draft")
+  sentAt         DateTime?
+  createdAt      DateTime   @default(now())
+  deliveries     Delivery[]
+}
+
+model Delivery {
+  id         String    @id @default(cuid())
+  leadId     String
+  campaignId String
+  channel    String
+  status     String    @default("pending")
+  error      String?
+  sentAt     DateTime?
+  lead       Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  campaign   Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+}

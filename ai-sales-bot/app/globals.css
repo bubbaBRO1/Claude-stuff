@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  --green: #00ff88;
+  --green-dim: #00cc6a;
+  --bg: #09090b;
+  --surface: #111113;
+  --surface2: #1a1a1d;
+  --border: #27272a;
+  --text: #f4f4f5;
+  --muted: #71717a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+/* glow utility */
+.glow {
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
+}
+
+/* scanline overlay */
+.scanlines::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
