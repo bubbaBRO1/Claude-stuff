@@ -10,35 +10,31 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "industry and location required" }, { status: 400 });
   }
 
-  const prompt = `I need you to generate a list of ${count} realistic potential business leads for:
+  const prompt = `Generate a list of ${count} realistic B2B sales leads for:
 - Industry: ${industry}
 - Location: ${location}
 
-For each lead, provide:
-- Business name
-- Contact person name (first + last)
-- A realistic phone number (US format)
-- A realistic business email address
-- Website URL
-- Brief note about why they'd be a good prospect
+For each lead, prioritize decision-makers (VP, Director, Head of, C-Suite).
 
 Respond ONLY with a valid JSON array in this exact format:
 [
   {
-    "name": "John Smith",
-    "company": "Smith Roofing LLC",
-    "phone": "5125550123",
-    "email": "john@smithroofing.com",
-    "website": "smithroofing.com",
-    "notes": "Growing company, recently expanded to commercial jobs"
+    "name": "Sarah Chen",
+    "company": "Apex Roofing Co",
+    "title": "VP of Operations",
+    "email": "s.chen@apexroofing.com",
+    "phone": "+15125550192",
+    "industry": "Commercial Roofing",
+    "score": 87,
+    "notes": "Decision-maker, recently expanded to multi-state ops"
   }
 ]
 
-Generate exactly ${count} leads. Make them realistic and varied.`;
+Score is 0–100 based on how likely they are to buy (decision-making authority, company size, timing signals). Generate exactly ${count} leads. Make them realistic and varied.`;
 
   try {
     const response = await anthropic.messages.create({
-      model: "claude-opus-4-6",
+      model: "claude-haiku-4-5-20251001",
       max_tokens: 2048,
       messages: [{ role: "user", content: prompt }],
     });

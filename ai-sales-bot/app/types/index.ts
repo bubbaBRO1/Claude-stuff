@@ -60,8 +60,11 @@ export interface EnhanceResult {
 export interface GeneratedLead {
   name: string;
   company: string;
+  title?: string;
   phone?: string;
   email?: string;
   website?: string;
+  industry?: string;
+  score?: number;
   notes?: string;
 }
