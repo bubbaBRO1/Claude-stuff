@@ -6,6 +6,7 @@
  */
 
 //@include "effects.jsx"
+//@include "edit.jsx"
 //@include "styles/xrh4.jsx"
 //@include "styles/24kjohn.jsx"
 //@include "styles/gulovsky.jsx"

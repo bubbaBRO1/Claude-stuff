@@ -181,6 +181,10 @@ html, body {
 .chip:hover { border-color: var(--accent); color: var(--accent); }
 .chip-tutorial { border-color: var(--accent2); color: var(--accent2); }
 .chip-tutorial:hover { border-color: #a07fc8; color: #a07fc8; }
+.chip-match  { border-color: #e67e22; color: #e67e22; }
+.chip-match:hover  { border-color: #f39c12; color: #f39c12; }
+.chip-create { border-color: #2ecc71; color: #2ecc71; }
+.chip-create:hover { border-color: #27ae60; color: #27ae60; }
 
 /* input row */
 .input-row {

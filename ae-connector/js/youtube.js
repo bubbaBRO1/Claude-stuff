@@ -72,12 +72,71 @@
   }
 
   /**
+   * Fetch video metadata via YouTube's free oEmbed endpoint (no API key needed)
+   * and combine with the transcript into a single rich context object.
+   *
+   * @param {string} url  - YouTube video URL
+   * @returns {Promise<{videoId, title, transcript, combinedText}>}
+   */
+  async function getVideoInfo(url) {
+    var videoId = extractVideoId(url);
+    if (!videoId) {
+      throw new Error('Could not parse a YouTube video ID from: ' + url);
+    }
+
+    // ── 1. Metadata via oEmbed (no API key) ──────────────────────────────
+    var title = '';
+    var authorName = '';
+    try {
+      var oembedUrl = 'https://www.youtube.com/oembed?url=' +
+        encodeURIComponent('https://www.youtube.com/watch?v=' + videoId) +
+        '&format=json';
+      var resp = await fetch(oembedUrl);
+      if (resp.ok) {
+        var meta = await resp.json();
+        title      = meta.title      || '';
+        authorName = meta.author_name || '';
+      }
+    } catch (e) {
+      // oEmbed failure is non-fatal — continue with empty title
+      console.warn('[youtube.js] oEmbed fetch failed:', e.message);
+    }
+
+    // ── 2. Transcript ─────────────────────────────────────────────────────
+    var transcriptText = '';
+    try {
+      var result = await getTranscript(url);
+      transcriptText = result.text;
+    } catch (e) {
+      // Transcript failure is non-fatal for match-edit (style can still be inferred)
+      console.warn('[youtube.js] Transcript fetch failed:', e.message);
+      transcriptText = '(transcript unavailable)';
+    }
+
+    // ── 3. Combine into rich context string ───────────────────────────────
+    var combinedText = [
+      title      ? 'Title: '   + title      : '',
+      authorName ? 'Channel: ' + authorName : '',
+      'Video ID: ' + videoId,
+      '',
+      'Transcript:',
+      transcriptText,
+    ].filter(Boolean).join('\n');
+
+    return { videoId: videoId, title: title, transcript: transcriptText, combinedText: combinedText };
+  }
+
+  /**
    * Quick check: is a string a YouTube URL?
    */
   function isYouTubeUrl(str) {
     return /youtube\.com|youtu\.be/.test(str);
   }
 
-  global.YouTubeClient = { getTranscript: getTranscript, isYouTubeUrl: isYouTubeUrl };
+  global.YouTubeClient = {
+    getTranscript: getTranscript,
+    getVideoInfo: getVideoInfo,
+    isYouTubeUrl: isYouTubeUrl,
+  };
 
 })(window);

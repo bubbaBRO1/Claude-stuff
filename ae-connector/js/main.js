@@ -78,12 +78,24 @@
     // Quick-action chips
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {
-        userInput.value = chip.getAttribute('data-fill');
-        userInput.focus();
-        // If "Follow tutorial…" chip, position caret at end
-        userInput.selectionStart = userInput.selectionEnd = userInput.value.length;
+        var fill = chip.getAttribute('data-fill');
+        if (fill !== null) {
+          userInput.value = fill;
+          userInput.focus();
+          userInput.selectionStart = userInput.selectionEnd = userInput.value.length;
+        }
       });
     });
+
+    // "Make edit" chip — open a small prompt dialog inline
+    var makeEditChip = document.getElementById('makeEditChip');
+    if (makeEditChip) {
+      makeEditChip.addEventListener('click', function () {
+        userInput.value = 'make me an edit ';
+        userInput.focus();
+        userInput.selectionStart = userInput.selectionEnd = userInput.value.length;
+      });
+    }
 
     // Hint clicks inside bot bubbles (delegated)
     messagesEl.addEventListener('click', function (e) {
@@ -110,6 +122,24 @@
     showChatPanel();
   }
 
+  // ── Detection helpers (pure, no side-effects) ────────────────────────────
+
+  /** Matches: "match ...", "copy style ...", "replicate style ...", "mimic ..." */
+  function isMatchEditCommand(text) {
+    return /^(match|copy style|replicate|mimic)\b/i.test(text.trim());
+  }
+
+  /** Matches: "make (me) (a/an) edit", "create edit", "build edit", "make edit" */
+  function isCreateEditCommand(text) {
+    return /\b(make\s+(me\s+)?(a\s+|an\s+)?edit|create\s+(an?\s+)?edit|build\s+(an?\s+)?edit)\b/i.test(text);
+  }
+
+  /** Pull the first http(s):// URL out of a string. */
+  function extractFirstUrl(text) {
+    var m = text.match(/https?:\/\/\S+/);
+    return m ? m[0] : null;
+  }
+
   // ── Send handler ──────────────────────────────────────────────────────────
   async function onSend() {
     if (busy) return;
@@ -119,16 +149,27 @@
     userInput.value = '';
     appendMessage('user', text);
 
-    // Check if the message contains a YouTube URL → tutorial mode
-    if (YouTubeClient.isYouTubeUrl(text)) {
-      var urlMatch = text.match(/https?:\/\/\S+/);
-      if (urlMatch) {
-        await runTutorialMode(urlMatch[0]);
-        return;
-      }
+    var url = extractFirstUrl(text);
+
+    // 1. "match <youtube-url>"  →  Match Edit mode
+    if (isMatchEditCommand(text) && url && YouTubeClient.isYouTubeUrl(url)) {
+      await runMatchEditMode(url);
+      return;
     }
 
-    // Normal chat command
+    // 2. YouTube URL without "match" keyword  →  Tutorial Follow mode
+    if (url && YouTubeClient.isYouTubeUrl(url)) {
+      await runTutorialMode(url);
+      return;
+    }
+
+    // 3. "make me an edit ..."  →  Create Edit mode
+    if (isCreateEditCommand(text)) {
+      await runCreateEditMode(text);
+      return;
+    }
+
+    // 4. Fallback — normal chat command
     await runChatCommand(text);
   }
 
@@ -276,6 +317,126 @@
     tutorialOverlay.classList.add('hidden');
     setBusy(false);
     setStatus('idle', 'Ready');
+  }
+
+  // ── Match Edit mode ───────────────────────────────────────────────────────
+  async function runMatchEditMode(url) {
+    setBusy(true, 'thinking');
+    setStatus('thinking', 'Fetching video info...');
+
+    var videoInfo;
+    try {
+      videoInfo = await YouTubeClient.getVideoInfo(url);
+    } catch (e) {
+      appendMessage('bot', 'Could not fetch video info: ' + e.message);
+      setBusy(false);
+      return;
+    }
+
+    var title = videoInfo.title || url;
+    setStatus('thinking', 'Analysing style of "' + title + '"...');
+    var typingId = appendTyping();
+
+    var result;
+    try {
+      result = await ClaudeClient.matchEdit(videoInfo);
+    } catch (e) {
+      removeMessage(typingId);
+      appendMessage('bot', 'Error analysing style: ' + e.message);
+      setBusy(false);
+      return;
+    }
+
+    removeMessage(typingId);
+
+    if (!result.jsx) {
+      appendMessage('bot', result.explanation);
+      setBusy(false);
+      return;
+    }
+
+    appendBotWithCode(result.explanation, result.jsx);
+    setStatus('applying', 'Applying matched style...');
+
+    csInterface.evalScript(result.jsx, function (res) {
+      try {
+        var parsed = JSON.parse(res);
+        setStatus(parsed.ok ? 'idle' : 'error', parsed.ok ? 'Style matched!' : 'AE error: ' + parsed.msg);
+        if (!parsed.ok) appendMessage('bot', 'After Effects error: ' + parsed.msg);
+      } catch (e) {
+        setStatus('error', 'Script error');
+        appendMessage('bot', 'Script error: ' + res);
+      }
+      setBusy(false);
+    });
+  }
+
+  // ── Create Edit mode ──────────────────────────────────────────────────────
+  async function runCreateEditMode(description) {
+    setBusy(true, 'thinking');
+    setStatus('thinking', 'Reading project...');
+
+    // Step 1: get project/layer info from AE
+    var projectInfoJson = await new Promise(function (resolve) {
+      csInterface.evalScript('getProjectInfo()', function (res) {
+        resolve(res || '{}');
+      });
+    });
+
+    // Check for empty comp early
+    try {
+      var info = JSON.parse(projectInfoJson);
+      if (!info.ok) {
+        appendMessage('bot', 'Cannot create edit: ' + (info.msg || 'No active composition.'));
+        setBusy(false);
+        return;
+      }
+      if (info.numLayers === 0) {
+        appendMessage('bot', 'Your composition has no layers. Add some footage first, then ask me to make an edit!');
+        setBusy(false);
+        return;
+      }
+    } catch (e) { /* proceed anyway */ }
+
+    setStatus('thinking', 'Planning your edit...');
+    var typingId = appendTyping();
+
+    var result;
+    try {
+      result = await ClaudeClient.createEdit(description, projectInfoJson);
+    } catch (e) {
+      removeMessage(typingId);
+      appendMessage('bot', 'Error planning edit: ' + e.message);
+      setBusy(false);
+      return;
+    }
+
+    removeMessage(typingId);
+
+    if (!result.jsx) {
+      appendMessage('bot', result.explanation);
+      setBusy(false);
+      return;
+    }
+
+    appendBotWithCode(result.explanation, result.jsx);
+    setStatus('applying', 'Building your edit in After Effects...');
+
+    csInterface.evalScript(result.jsx, function (res) {
+      try {
+        var parsed = JSON.parse(res);
+        setStatus(parsed.ok ? 'idle' : 'error', parsed.ok ? 'Edit created!' : 'AE error: ' + parsed.msg);
+        if (parsed.ok) {
+          appendMessage('bot', 'Edit done! ' + parsed.msg);
+        } else {
+          appendMessage('bot', 'After Effects error: ' + parsed.msg);
+        }
+      } catch (e) {
+        setStatus('error', 'Script error');
+        appendMessage('bot', 'Script error: ' + res);
+      }
+      setBusy(false);
+    });
   }
 
   // ── UI helpers ────────────────────────────────────────────────────────────
