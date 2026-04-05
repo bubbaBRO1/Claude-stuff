@@ -87,7 +87,7 @@
       });
     });
 
-    // "Make edit" chip — open a small prompt dialog inline
+    // "Make edit" chip — prefill the prompt
     var makeEditChip = document.getElementById('makeEditChip');
     if (makeEditChip) {
       makeEditChip.addEventListener('click', function () {
@@ -96,6 +96,36 @@
         userInput.selectionStart = userInput.selectionEnd = userInput.value.length;
       });
     }
+
+    // Creator style chips — call ExtendScript directly (instant, no API call)
+    var styleChips = document.querySelectorAll('.chip-style');
+    styleChips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        if (busy) return;
+        var fn = chip.getAttribute('data-style');
+        var styleName = chip.textContent;
+        setBusy(true, 'applying');
+        appendMessage('user', 'Apply ' + styleName + ' style');
+        setStatus('applying', 'Applying ' + styleName + ' style...');
+
+        csInterface.evalScript(fn + '()', function (res) {
+          try {
+            var parsed = JSON.parse(res);
+            if (parsed.ok) {
+              appendMessage('bot', parsed.msg);
+              setStatus('idle', 'Done!');
+            } else {
+              appendMessage('bot', 'Error: ' + parsed.msg);
+              setStatus('error', parsed.msg);
+            }
+          } catch (e) {
+            appendMessage('bot', 'Script error: ' + res);
+            setStatus('error', 'Script error');
+          }
+          setBusy(false);
+        });
+      });
+    });
 
     // Hint clicks inside bot bubbles (delegated)
     messagesEl.addEventListener('click', function (e) {

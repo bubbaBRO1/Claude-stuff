@@ -185,6 +185,8 @@ html, body {
 .chip-match:hover  { border-color: #f39c12; color: #f39c12; }
 .chip-create { border-color: #2ecc71; color: #2ecc71; }
 .chip-create:hover { border-color: #27ae60; color: #27ae60; }
+.chip-style { border-color: #00d4ff; color: #00d4ff; }
+.chip-style:hover { border-color: #5be0ff; color: #5be0ff; }
 
 /* input row */
 .input-row {
