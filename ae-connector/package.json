@@ -1,0 +1,13 @@
+{
+  "name": "claude-ae-connector",
+  "version": "1.0.0",
+  "description": "Claude AI connector for Adobe After Effects — chat-powered editing, creator styles, tutorial follower, and preset manager.",
+  "main": "js/main.js",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.37.0",
+    "youtube-transcript": "^1.2.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
