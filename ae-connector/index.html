@@ -41,12 +41,14 @@
         <div class="bubble">
           Hey! I'm your Claude connector for After Effects.<br/><br/>
           You can tell me things like:<br/>
+          <span class="hint">make a Tai Lung edit</span><br/>
+          <span class="hint">sync to the audio</span><br/>
           <span class="hint">make me a cinematic edit with fast cuts</span><br/>
           <span class="hint">match https://youtube.com/watch?v=...</span><br/>
           <span class="hint">apply xrh4 style to selected layer</span><br/>
           <span class="hint">follow https://youtube.com/watch?v=...</span><br/>
           <span class="hint">add a glow effect to the selected layer</span><br/>
-          <span class="hint">apply preset Cinematic</span>
+          Or type a rough idea and hit &#10024; to enhance it first!
         </div>
       </div>
     </div>
@@ -63,6 +65,7 @@
 
     <!-- Input row -->
     <div class="input-row">
+      <button id="enhanceBtn" class="enhance-btn" title="Enhance prompt with AI">&#10024;</button>
       <textarea id="userInput" placeholder="Ask Claude to edit your project..." rows="2"></textarea>
       <button id="sendBtn" class="send-btn">&#9658;</button>
     </div>

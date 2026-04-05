@@ -96,6 +96,32 @@
     '- "fast cuts" → each clip 0.5–1.5s, overlap transitions 0.1s',
     '- "slow/cinematic" → each clip 3–6s, slow-zoom keyframes on Scale property, 0.5s dissolves',
     '- "medium" → 1.5–3s clips, 0.2s dissolves',
+    '',
+    'Character/franchise edit guidance:',
+    '- If the edit is for a specific character or franchise (e.g. "Tai Lung edit", "Spider-Man edit"):',
+    '  • Look for layers whose names contain that character/franchise name (case-insensitive substring match)',
+    '  • Build the edit primarily around those matching layers; treat others as B-roll or cut them short',
+    '  • Match the character\'s energy: action character → fast cuts (0.5–1s), motion blur, chromatic aberration',
+    '                                  emotional/dramatic → slow dissolves (0.5s), vignette, warm grade',
+    '',
+    'Audio-sync edit guidance:',
+    '- If an audio layer is present (hasAudio:true, hasVideo:false in the project JSON):',
+    '  • Set comp.duration to match the audio layer\'s duration',
+    '  • Divide video layers into equal-length clips that together fill that total duration',
+    '  • Sequence them end-to-end with 0.1s dissolve overlaps',
+    '  • Enable motion blur on each video layer',
+    '  • Do NOT trim or modify the audio layer — just set its startTime to 0',
+  ].join('\n');
+
+  var SYSTEM_ENHANCE_PROMPT = [
+    'You are an Adobe After Effects creative director. The user has typed a rough brief for a video edit.',
+    'Rewrite it as a detailed, specific AE edit brief in 3-5 sentences covering all of these aspects:',
+    '- Mood and color palette (e.g. "crushed blacks, warm orange highlights, heavy vignette")',
+    '- Pacing and cut style (e.g. "fast cuts every 0.5-1s in the first half, slow dissolves in the second half")',
+    '- Transitions between clips (e.g. "opacity cross-dissolves, no hard cuts")',
+    '- Effects to apply (choose from: glow, chromatic aberration, motion blur, cinematic bars, vignette, light leak)',
+    '- Any title text, lower-thirds, or overlay text requested',
+    'Return ONLY the enhanced brief as plain text. No preamble, no code, no bullet points — just flowing sentences.',
   ].join('\n');
 
   var SYSTEM_TUTORIAL = [
@@ -259,11 +285,34 @@
     return { explanation: explanation, jsx: jsx, raw: raw };
   }
 
+  /**
+   * Rewrite a rough edit brief into a detailed, specific AE brief.
+   * Returns the enhanced text string (no JSX, just plain text).
+   *
+   * @param {string} text  - The user's rough prompt
+   * @returns {Promise<string>}
+   */
+  async function enhancePrompt(text) {
+    var client = makeClient();
+
+    var response = await client.messages.create({
+      model: MODEL,
+      max_tokens: 512,
+      system: SYSTEM_ENHANCE_PROMPT,
+      messages: [
+        { role: 'user', content: text },
+      ],
+    });
+
+    return response.content[0].text.trim();
+  }
+
   global.ClaudeClient = {
     ask: ask,
     parseTutorial: parseTutorial,
     matchEdit: matchEdit,
     createEdit: createEdit,
+    enhancePrompt: enhancePrompt,
     getApiKey: getApiKey,
   };
 

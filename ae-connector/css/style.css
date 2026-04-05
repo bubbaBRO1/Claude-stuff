@@ -188,6 +188,29 @@ html, body {
 .chip-style { border-color: #00d4ff; color: #00d4ff; }
 .chip-style:hover { border-color: #5be0ff; color: #5be0ff; }
 
+/* enhance button */
+.enhance-btn {
+  background: transparent;
+  border: 1px solid #7b5ea7;
+  color: #7b5ea7;
+  border-radius: 6px;
+  padding: 0 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, opacity 0.2s;
+  align-self: flex-end;
+  height: 36px;
+  flex-shrink: 0;
+}
+.enhance-btn:hover {
+  border-color: #a07fc8;
+  color: #a07fc8;
+}
+.enhance-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* input row */
 .input-row {
   display: flex;

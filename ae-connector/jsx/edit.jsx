@@ -31,7 +31,9 @@ function getProjectInfo() {
             inPoint:  Math.round(l.inPoint  * 100) / 100,
             outPoint: Math.round(l.outPoint * 100) / 100,
             duration: Math.round((l.outPoint - l.inPoint) * 100) / 100,
-            selected: l.selected
+            selected: l.selected,
+            hasVideo: (l instanceof AVLayer) ? l.hasVideo : false,
+            hasAudio: (l instanceof AVLayer) ? l.hasAudio : false
         });
     }
 
