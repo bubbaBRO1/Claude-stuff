@@ -79,6 +79,102 @@
       runEnhancePrompt();
     });
 
+    // Voice mic button (Web Speech API)
+    var micBtn = document.getElementById('micBtn');
+    if (micBtn) {
+      var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        var recognition = new SpeechRecognition();
+        recognition.continuous    = false;
+        recognition.interimResults = true;
+        recognition.lang          = 'en-US';
+
+        recognition.onresult = function (e) {
+          var transcript = Array.from(e.results)
+            .map(function (r) { return r[0].transcript; }).join('');
+          userInput.value = transcript;
+          if (e.results[e.results.length - 1].isFinal) {
+            micBtn.classList.remove('mic-active');
+          }
+        };
+        recognition.onerror = function (e) {
+          micBtn.classList.remove('mic-active');
+          if (e.error !== 'aborted') appendMessage('bot', 'Mic error: ' + e.error);
+        };
+        recognition.onend = function () { micBtn.classList.remove('mic-active'); };
+
+        micBtn.addEventListener('click', function () {
+          if (busy) return;
+          if (micBtn.classList.contains('mic-active')) {
+            recognition.stop();
+          } else {
+            micBtn.classList.add('mic-active');
+            userInput.value = '';
+            recognition.start();
+          }
+        });
+      } else {
+        micBtn.disabled = true;
+        micBtn.title = 'Speech recognition not supported in this browser';
+      }
+    }
+
+    // Preset settings modal
+    var presetsBtn  = document.getElementById('presetsBtn');
+    var presetModal = document.getElementById('presetModal');
+    var closePresetModal = document.getElementById('closePresetModal');
+    var addFolderBtn = document.getElementById('addFolderBtn');
+    var folderPathInput = document.getElementById('folderPathInput');
+
+    if (presetsBtn && presetModal) {
+      presetsBtn.addEventListener('click', function () {
+        renderFolderList();
+        presetModal.classList.toggle('hidden');
+      });
+      closePresetModal.addEventListener('click', function () {
+        presetModal.classList.add('hidden');
+      });
+      addFolderBtn.addEventListener('click', function () {
+        var p = folderPathInput.value.trim();
+        if (!p) return;
+        PresetsManager.addFolder(p);
+        folderPathInput.value = '';
+        renderFolderList();
+      });
+    }
+
+    function renderFolderList() {
+      var list = document.getElementById('folderList');
+      if (!list) return;
+      var folders = PresetsManager.getFolders();
+      list.innerHTML = '';
+      if (folders.length === 0) {
+        list.innerHTML = '<li class="folder-empty">No preset folders added.</li>';
+        return;
+      }
+      folders.forEach(function (f) {
+        var li = document.createElement('li');
+        li.className = 'folder-item';
+        var span = document.createElement('span');
+        span.className = 'folder-path';
+        span.textContent = f;
+        var btn = document.createElement('button');
+        btn.className = 'folder-remove';
+        btn.textContent = '×';
+        btn.addEventListener('click', function () {
+          PresetsManager.removeFolder(f);
+          renderFolderList();
+        });
+        li.appendChild(span);
+        li.appendChild(btn);
+        list.appendChild(li);
+      });
+      // Show catalog count
+      var count = PresetsManager.getCatalog().length;
+      var info = document.getElementById('presetCount');
+      if (info) info.textContent = count + ' presets found across all folders';
+    }
+
     // Quick-action chips
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {
@@ -158,40 +254,49 @@
 
   // ── Detection helpers (pure, no side-effects) ────────────────────────────
 
-  /** Matches: "match ...", "copy style ...", "replicate style ...", "mimic ..." */
   function isMatchEditCommand(text) {
     return /^(match|copy style|replicate|mimic)\b/i.test(text.trim());
   }
 
-  /**
-   * Detect "make a [Subject] edit" where Subject is a specific character/franchise name.
-   * Returns the subject string (e.g. "Tai Lung") or null for generic edit commands.
-   * Must be checked BEFORE isCreateEditCommand to intercept character edits.
-   */
   function detectCharacterEdit(text) {
     var m = text.match(/\bmake\s+(?:me\s+)?(?:a\s+|an\s+)?(.+?)\s+edit\b/i);
     if (!m) return null;
     var subject = m[1].trim();
-    // Exclude generic words that indicate a general edit, not a character edit
-    if (/^(me|a|an|the|my|your|some|full|complete|quick|fast|slow|cinematic|cool|good|great|nice|awesome|epic|sick|fire|dope|short|long|clean|smooth|dark|moody|chill|hype)$/i.test(subject)) return null;
+    if (/^(me|a|an|the|my|your|some|full|complete|quick|fast|slow|cinematic|cool|good|great|nice|awesome|epic|sick|fire|dope|short|long|clean|smooth|dark|moody|chill|hype|tiling?|split|grid|audio|music)$/i.test(subject)) return null;
     return subject;
   }
 
-  /** Matches: "make (me) (a/an) edit", "create edit", "build edit", "make edit" */
   function isCreateEditCommand(text) {
     return /\b(make\s+(me\s+)?(a\s+|an\s+)?edit|create\s+(an?\s+)?edit|build\s+(an?\s+)?edit)\b/i.test(text);
   }
 
-  /**
-   * Matches audio-sync commands:
-   * "sync to the audio", "use the music/song/track", "make an edit with my music",
-   * "audio edit", "music edit", "to the beat"
-   */
   function isAudioSyncCommand(text) {
     return /\b(sync\s+to\s+(the\s+)?audio|use\s+(the\s+)?(audio|music|song|track)|make.*edit.*with\s+(the\s+)?(audio|music|song)|audio.*edit|music.*edit|to\s+the\s+beat)\b/i.test(text);
   }
 
-  /** Pull the first http(s):// URL out of a string. */
+  function isTilingEditCommand(text) {
+    return /\b(tiling?\s+edit|split\s+screen|multi.?screen|grid\s+edit|\d+x\d+\s+(layout|edit|grid))\b/i.test(text);
+  }
+
+  function isRenderCommand(text) {
+    return /^\s*(auto\s+)?render\b/i.test(text.trim()) ||
+      /\b(add to render queue|start render|render (this|the|my) (comp|edit|project))\b/i.test(text);
+  }
+
+  function isAnalysisCommand(text) {
+    return /\b(what do you think|analyse|analyze|critique|review|feedback|thoughts on)\b.*\b(edit|comp|project|timeline|cut)\b/i.test(text) ||
+      /\bhow('?s| does| is)?\s+(my|the)\s+(edit|comp|cut|project)\b/i.test(text);
+  }
+
+  /** Detect "apply preset [name]" */
+  function detectPresetCommand(text) {
+    var m = text.match(/\bapply\s+(preset\s+)?(.+?)\s*(?:preset\s*)?(?:to\s+|$)/i);
+    if (!m) return null;
+    var name = m[2].trim();
+    if (/^(style|effect|filter|grade|look)$/i.test(name)) return null;
+    return name;
+  }
+
   function extractFirstUrl(text) {
     var m = text.match(/https?:\/\/\S+/);
     return m ? m[0] : null;
@@ -204,9 +309,16 @@
     if (!text) return;
 
     userInput.value = '';
+    userInput.style.height = '';
     appendMessage('user', text);
 
     var url = extractFirstUrl(text);
+
+    // 0. Render command — check first (single word, high priority)
+    if (isRenderCommand(text)) {
+      await runRenderCommand();
+      return;
+    }
 
     // 1. "match <youtube-url>"  →  Match Edit mode
     if (isMatchEditCommand(text) && url && YouTubeClient.isYouTubeUrl(url)) {
@@ -214,32 +326,44 @@
       return;
     }
 
-    // 2. YouTube URL without "match" keyword  →  Tutorial Follow mode
+    // 2. YouTube URL alone  →  Tutorial Follow mode
     if (url && YouTubeClient.isYouTubeUrl(url)) {
       await runTutorialMode(url);
       return;
     }
 
-    // 3. "sync to audio / use the music"  →  Audio-Sync Edit mode
+    // 3. Analysis request
+    if (isAnalysisCommand(text)) {
+      await runAnalysisMode();
+      return;
+    }
+
+    // 4. Tiling edit
+    if (isTilingEditCommand(text)) {
+      await runTilingEditMode(text);
+      return;
+    }
+
+    // 5. Audio-sync edit
     if (isAudioSyncCommand(text)) {
       await runAudioSyncEditMode(text);
       return;
     }
 
-    // 4. "make a Tai Lung edit"  →  Character Edit mode
+    // 7. Character edit (e.g. "make a Tai Lung edit")
     var character = detectCharacterEdit(text);
     if (character) {
       await runCharacterEditMode(character, text);
       return;
     }
 
-    // 5. "make me an edit ..."  →  Generic Create Edit mode
+    // 8. Generic create edit
     if (isCreateEditCommand(text)) {
       await runCreateEditMode(text);
       return;
     }
 
-    // 6. Fallback — normal chat command
+    // 9. Fallback — normal chat command
     await runChatCommand(text);
   }
 
@@ -651,6 +775,138 @@
       try {
         var parsed = JSON.parse(res);
         setStatus(parsed.ok ? 'idle' : 'error', parsed.ok ? 'Audio-synced edit done!' : 'AE error: ' + parsed.msg);
+        if (parsed.ok) appendMessage('bot', parsed.msg);
+        else appendMessage('bot', 'After Effects error: ' + parsed.msg);
+      } catch (e) {
+        setStatus('error', 'Script error');
+        appendMessage('bot', 'Script error: ' + res);
+      }
+      setBusy(false);
+    });
+  }
+
+  // ── Render command ────────────────────────────────────────────────────────
+  async function runRenderCommand() {
+    setBusy(true, 'applying');
+    setStatus('applying', 'Rendering...');
+    appendMessage('bot', 'Adding your comp to the render queue and starting render. After Effects will be busy until it finishes...');
+
+    await new Promise(function (resolve) {
+      csInterface.evalScript('addToRenderQueue()', function (res) {
+        try {
+          var parsed = JSON.parse(res);
+          if (parsed.ok) {
+            appendMessage('bot', 'Render complete! ' + parsed.msg);
+            setStatus('idle', 'Render done');
+          } else {
+            appendMessage('bot', 'Render error: ' + parsed.msg);
+            setStatus('error', parsed.msg);
+          }
+        } catch (e) {
+          appendMessage('bot', 'Render script error: ' + res);
+          setStatus('error', 'Script error');
+        }
+        resolve();
+      });
+    });
+
+    setBusy(false);
+  }
+
+  // ── Analysis mode ─────────────────────────────────────────────────────────
+  async function runAnalysisMode() {
+    setBusy(true, 'thinking');
+    setStatus('thinking', 'Reading your comp...');
+
+    var projectInfoJson = await new Promise(function (resolve) {
+      csInterface.evalScript('getProjectInfo()', function (res) { resolve(res || '{}'); });
+    });
+
+    var info;
+    try { info = JSON.parse(projectInfoJson); } catch (e) { info = {}; }
+
+    if (!info.ok) {
+      appendMessage('bot', 'Cannot analyse: ' + (info.msg || 'No active composition open.'));
+      setBusy(false);
+      return;
+    }
+
+    var typingId = appendTyping();
+    setStatus('thinking', 'Forming creative opinion...');
+
+    var feedback;
+    try {
+      feedback = await ClaudeClient.analyseEdit(projectInfoJson);
+    } catch (e) {
+      removeMessage(typingId);
+      appendMessage('bot', 'Error getting feedback: ' + e.message);
+      setBusy(false);
+      return;
+    }
+
+    removeMessage(typingId);
+    appendMessage('bot', feedback);
+    setStatus('idle', 'Analysis complete');
+    setBusy(false);
+  }
+
+  // ── Tiling Edit mode ──────────────────────────────────────────────────────
+  async function runTilingEditMode(text) {
+    setBusy(true, 'thinking');
+    setStatus('thinking', 'Reading project...');
+
+    var projectInfoJson = await new Promise(function (resolve) {
+      csInterface.evalScript('getProjectInfo()', function (res) { resolve(res || '{}'); });
+    });
+
+    var info;
+    try { info = JSON.parse(projectInfoJson); } catch (e) { info = {}; }
+
+    if (!info.ok || !info.numLayers) {
+      appendMessage('bot', 'No footage layers found. Add some video layers first!');
+      setBusy(false);
+      return;
+    }
+
+    // Parse grid size from text if specified (e.g. "2x2", "3x2")
+    var cols = 2, rows = 2;
+    var gridMatch = text.match(/(\d+)\s*x\s*(\d+)/i);
+    if (gridMatch) { cols = parseInt(gridMatch[1]); rows = parseInt(gridMatch[2]); }
+
+    var description = text +
+      '\n\nApply a ' + cols + 'x' + rows + ' tiling grid layout.' +
+      '\nCall buildTilingLayout(' + cols + ', ' + rows + ') to arrange layers in the grid.' +
+      '\nCall addCameraShake() on each video layer for energy.' +
+      '\nAdd motion blur to all video layers.';
+
+    var typingId = appendTyping();
+    setStatus('thinking', 'Planning tiling layout...');
+
+    var result;
+    try {
+      result = await ClaudeClient.createEdit(description, projectInfoJson);
+    } catch (e) {
+      removeMessage(typingId);
+      appendMessage('bot', 'Error planning tiling edit: ' + e.message);
+      setBusy(false);
+      return;
+    }
+
+    removeMessage(typingId);
+
+    if (!result.jsx) {
+      appendMessage('bot', result.explanation);
+      setBusy(false);
+      return;
+    }
+
+    appendBotWithCode(result.explanation, result.jsx);
+    setStatus('applying', 'Building tiling layout in After Effects...');
+
+    csInterface.evalScript(result.jsx, function (res) {
+      try {
+        var parsed = JSON.parse(res);
+        setStatus(parsed.ok ? 'idle' : 'error', parsed.ok ? 'Tiling edit done!' : 'AE error: ' + parsed.msg);
         if (parsed.ok) appendMessage('bot', parsed.msg);
         else appendMessage('bot', 'After Effects error: ' + parsed.msg);
       } catch (e) {

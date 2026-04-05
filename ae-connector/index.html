@@ -26,7 +26,10 @@
     <!-- Header -->
     <div class="chat-header">
       <span class="logo">&#9670; Claude Connector</span>
-      <button id="settingsBtn" class="icon-btn" title="Settings">&#9881;</button>
+      <div class="header-actions">
+        <button id="presetsBtn" class="icon-btn" title="Preset folders">&#128193;</button>
+        <button id="settingsBtn" class="icon-btn" title="Settings">&#9881;</button>
+      </div>
     </div>
 
     <!-- Status bar -->
@@ -40,23 +43,31 @@
       <div class="msg bot">
         <div class="bubble">
           Hey! I'm your Claude connector for After Effects.<br/><br/>
-          You can tell me things like:<br/>
+          Things you can say:<br/>
           <span class="hint">make a Tai Lung edit</span><br/>
+          <span class="hint">make a 2x2 tiling edit with shakes</span><br/>
           <span class="hint">sync to the audio</span><br/>
-          <span class="hint">make me a cinematic edit with fast cuts</span><br/>
+          <span class="hint">make me a cinematic edit with fast cuts and film grain</span><br/>
+          <span class="hint">add camera shake to selected layer</span><br/>
+          <span class="hint">add a glitch effect</span><br/>
+          <span class="hint">what do you think of my edit?</span><br/>
+          <span class="hint">render</span><br/>
           <span class="hint">match https://youtube.com/watch?v=...</span><br/>
-          <span class="hint">apply xrh4 style to selected layer</span><br/>
-          <span class="hint">follow https://youtube.com/watch?v=...</span><br/>
-          <span class="hint">add a glow effect to the selected layer</span><br/>
-          Or type a rough idea and hit &#10024; to enhance it first!
+          Type a rough idea and hit &#10024; to expand it, or tap &#127908; to speak!
         </div>
       </div>
     </div>
 
-    <!-- Quick-action chips -->
+    <!-- Quick-action chips (row 1: edit modes) -->
     <div class="chips">
       <button class="chip chip-create" id="makeEditChip">Make edit</button>
       <button class="chip chip-match" data-fill="match ">Match edit&hellip;</button>
+      <button class="chip chip-tiling" data-fill="make a 2x2 tiling edit with shakes">Tiling</button>
+      <button class="chip chip-analyse" data-fill="what do you think of my edit?">Analyse</button>
+      <button class="chip chip-render" data-fill="render">Render</button>
+    </div>
+    <!-- Quick-action chips (row 2: creator styles + tutorial) -->
+    <div class="chips">
       <button class="chip chip-style" data-style="xrh4_apply">xrh4</button>
       <button class="chip chip-style" data-style="kjohn24_apply">24kjohn</button>
       <button class="chip chip-style" data-style="gulovsky_apply">gulovsky</button>
@@ -66,10 +77,30 @@
     <!-- Input row -->
     <div class="input-row">
       <button id="enhanceBtn" class="enhance-btn" title="Enhance prompt with AI">&#10024;</button>
-      <textarea id="userInput" placeholder="Ask Claude to edit your project..." rows="2"></textarea>
+      <button id="micBtn" class="mic-btn" title="Voice input">&#127908;</button>
+      <textarea id="userInput" placeholder="Ask Claude anything about your project..." rows="2"></textarea>
       <button id="sendBtn" class="send-btn">&#9658;</button>
     </div>
 
+  </div>
+
+  <!-- Preset Folders Modal -->
+  <div id="presetModal" class="modal hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-title">&#128193; Preset Folders</span>
+        <button id="closePresetModal" class="icon-btn">&#10005;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-hint">Add folders containing your .ffx preset files. Sub-folders are scanned automatically.</p>
+        <div class="folder-add-row">
+          <input type="text" id="folderPathInput" placeholder="/path/to/your/presets" class="folder-input"/>
+          <button id="addFolderBtn" class="btn-primary btn-sm">Add</button>
+        </div>
+        <ul id="folderList" class="folder-list"></ul>
+        <div id="presetCount" class="preset-count"></div>
+      </div>
+    </div>
   </div>
 
   <!-- Tutorial progress overlay -->

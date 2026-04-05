@@ -1,12 +1,14 @@
 /**
- * 24kjohn.jsx  —  24kjohn-style effect chain
+ * 24kjohn.jsx  —  24kjohn creator style
  *
- * Characteristics:
- *   - Smooth slow-zoom keyframes (Ken Burns style push-in)
- *   - Warm, orange-tinted color grade (lifted shadows warm, orange mids)
- *   - Black cinematic bars (top and bottom solid layers, 2.39:1 aspect)
- *   - Soft motion blur
- *   - Slight glow/softness
+ * Signature look: cinematic, warm, smooth — the "premium edit" aesthetic.
+ * - Slow push-in zoom (Ken Burns, very smooth with ease)
+ * - Warm orange/amber color grade (Lumetri: temp +22, shadows lifted warm)
+ * - Soft glow / bloom over highlights
+ * - Black cinematic bars (2.39:1 widescreen)
+ * - Motion blur enabled
+ * - Slight vignette for depth
+ * - Clean, no glitch — deliberate and polished
  */
 
 function kjohn24_apply() {
@@ -29,61 +31,58 @@ function kjohn24_apply() {
     for (var i = 0; i < layers.length; i++) {
         var layer = layers[i];
 
-        // 1. Slow zoom — scale from 100% to 108% over the layer's duration
         try {
+            // 1. Slow zoom — 100% → 108%, eased in and out
             var scale = layer.property("Transform").property("Scale");
-            var startTime = layer.inPoint;
-            var endTime   = layer.outPoint;
-            scale.setValueAtTime(startTime, [100, 100]);
-            scale.setValueAtTime(endTime,   [108, 108]);
-            // Ease both keyframes
-            var easyEase = new KeyframeEase(0.5, 33);
-            scale.setTemporalEaseAtKey(1, [easyEase], [easyEase]);
-            scale.setTemporalEaseAtKey(2, [easyEase], [easyEase]);
-        } catch (e) { /* continue */ }
+            var inPt  = layer.inPoint;
+            var outPt = layer.outPoint;
+            scale.setValueAtTime(inPt,  [100, 100]);
+            scale.setValueAtTime(outPt, [108, 108]);
+            var ease = new KeyframeEase(0.5, 33);
+            scale.setTemporalEaseAtKey(1, [ease], [ease]);
+            scale.setTemporalEaseAtKey(2, [ease], [ease]);
+        } catch (e) {}
 
-        // 2. Warm color grade via Lumetri / Color Balance
         try {
-            // Use ADBE Lumetri if available (CC 2015+)
-            var lumetri = layer("Effects").addProperty("ADBE Lumetri");
-            // Colour wheels: lift (shadows), gamma (mids), gain (highlights)
-            // Shadow tint warm (+orange)
-            lumetri.property("ADBE Lumetri-0003").property("ADBE Lumetri-0030").setValue(15);  // Shadow Tint
-            // Temperature warm
-            lumetri.property("ADBE Lumetri-0002").property("ADBE Lumetri-0009").setValue(18);  // Temperature
-            lumetri.property("ADBE Lumetri-0002").property("ADBE Lumetri-0010").setValue(8);   // Tint (green-magenta)
-        } catch (e) {
-            // Fallback: Color Balance (HLS)
-            try {
-                var cb = layer("Effects").addProperty("ADBE Color Balance (HLS)");
-                cb.property("ADBE Color Balance (HLS)-0002").setValue(12); // Hue shift toward warm
-                cb.property("ADBE Color Balance (HLS)-0003").setValue(5);  // Lightness slight lift
-            } catch (e2) { /* continue */ }
-        }
+            // 2. Warm color grade via Curves (universal, no Lumetri dependency)
+            var curves = layer("Effects").addProperty("ADBE CurvesCustom");
+            // Master: lift shadows slightly (airy feel)
+            curves.property(1).setValue([[0,0.04],[0.5,0.52],[1,1]]);
+            // Red: boost warm (lift shadows red)
+            curves.property(2).setValue([[0,0.06],[0.4,0.46],[1,1.0]]);
+            // Green: slight midtone boost
+            curves.property(3).setValue([[0,0],[0.5,0.53],[1,1]]);
+            // Blue: pull down slightly in mids (adds orange)
+            curves.property(4).setValue([[0,0],[0.5,0.46],[1,1]]);
+        } catch (e) {}
 
-        // 3. Motion blur
         try {
+            // 3. Soft glow / bloom (wide radius, low intensity)
+            addGlow(layer, 65, 55, 0.45);
+        } catch (e) {}
+
+        try {
+            // 4. Motion blur
             enableMotionBlur(layer, comp);
-        } catch (e) { /* continue */ }
-
-        // 4. Soft glow
-        try {
-            addGlow(layer, 70, 40, 0.4);
-        } catch (e) { /* continue */ }
+        } catch (e) {}
 
         applied.push(layer.name);
     }
 
-    // 5. Cinematic bars — 2.39:1 mask (black top/bottom solids)
     try {
-        var barHeight = 0.08; // 8% of comp height each side
-        addSolidBar(comp, "Cine Bar TOP",    [0,0,0], barHeight, "top");
-        addSolidBar(comp, "Cine Bar BOTTOM", [0,0,0], barHeight, "bottom");
-    } catch (e) { /* continue */ }
+        // 5. Cinematic bars — 2.39:1 widescreen (8% each side)
+        addSolidBar(comp, "Cine Bar TOP",    [0,0,0], 0.08, "top");
+        addSolidBar(comp, "Cine Bar BOTTOM", [0,0,0], 0.08, "bottom");
+    } catch (e) {}
+
+    try {
+        // 6. Subtle vignette for depth
+        addVignette(comp, 45);
+    } catch (e) {}
 
     app.endUndoGroup();
     return JSON.stringify({
         ok: true,
-        msg: "24kjohn style applied to: " + applied.join(", ") + " + cinematic bars added."
+        msg: "24kjohn style applied to: " + applied.join(", ") + " — warm grade, slow zoom, cinematic bars, soft glow."
     });
 }

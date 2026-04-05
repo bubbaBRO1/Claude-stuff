@@ -151,3 +151,90 @@ function sequenceLayersEndToEnd(overlap) {
         cursor += dur - overlap;
     }
 }
+
+/**
+ * Add the active composition to After Effects' render queue and start rendering.
+ * Note: renderQueue.render() is synchronous — this call blocks until render completes.
+ */
+function addToRenderQueue() {
+    var comp = getActiveComp();
+    if (!comp) {
+        return JSON.stringify({ ok: false, msg: "No active composition to render." });
+    }
+
+    app.beginUndoGroup("Claude: render");
+    try {
+        var rqItem = app.project.renderQueue.items.add(comp);
+        // Leave output module at user's default — don't override their settings
+        app.endUndoGroup();
+
+        // Start render — this blocks until complete
+        app.project.renderQueue.render();
+        return JSON.stringify({ ok: true, msg: "Render complete: " + comp.name });
+    } catch (e) {
+        app.endUndoGroup();
+        return JSON.stringify({ ok: false, msg: "Render error: " + e.toString() });
+    }
+}
+
+/**
+ * Arrange layers in a tiling grid layout within the comp.
+ * Scales each layer to fit its cell and positions it in the grid.
+ *
+ * @param {number} cols     - number of columns (default 2)
+ * @param {number} rows     - number of rows (default 2)
+ * @param {number} padding  - gap between cells in pixels (default 4)
+ */
+function buildTilingLayout(cols, rows, padding) {
+    app.beginUndoGroup("Claude: tiling layout");
+
+    var comp = getActiveComp();
+    if (!comp) {
+        app.endUndoGroup();
+        return JSON.stringify({ ok: false, msg: "No active composition." });
+    }
+
+    var c = cols    || 2;
+    var r = rows    || 2;
+    var p = padding || 4;
+
+    var cellW = (comp.width  - p * (c + 1)) / c;
+    var cellH = (comp.height - p * (r + 1)) / r;
+
+    // Collect AV layers
+    var avLayers = [];
+    for (var i = 1; i <= comp.numLayers; i++) {
+        if (comp.layers[i] instanceof AVLayer) avLayers.push(comp.layers[i]);
+    }
+
+    if (avLayers.length === 0) {
+        app.endUndoGroup();
+        return JSON.stringify({ ok: false, msg: "No AV layers to tile." });
+    }
+
+    var placed = 0;
+    for (var row = 0; row < r; row++) {
+        for (var col = 0; col < c; col++) {
+            var layer = avLayers[placed % avLayers.length];
+
+            // Scale to fit cell (maintain aspect, then scale to fill)
+            var scaleX = (cellW / comp.width)  * 100;
+            var scaleY = (cellH / comp.height) * 100;
+            var scl    = Math.max(scaleX, scaleY);
+            layer.property("Transform").property("Scale").setValue([scl, scl]);
+
+            // Position at cell centre
+            var cx = p + col * (cellW + p) + cellW / 2;
+            var cy = p + row * (cellH + p) + cellH / 2;
+            layer.property("Transform").property("Position").setValue([cx, cy]);
+
+            // Add camera shake to each cell
+            try { addCameraShake(layer, 6, 4); } catch (e2) {}
+
+            placed++;
+        }
+    }
+
+    app.endUndoGroup();
+    return JSON.stringify({ ok: true, msg: "Tiling layout applied: " + c + "x" + r + " grid (" + Math.min(placed, avLayers.length) + " layers placed)." });
+}

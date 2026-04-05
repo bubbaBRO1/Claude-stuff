@@ -187,6 +187,15 @@ html, body {
 .chip-create:hover { border-color: #27ae60; color: #27ae60; }
 .chip-style { border-color: #00d4ff; color: #00d4ff; }
 .chip-style:hover { border-color: #5be0ff; color: #5be0ff; }
+.chip-tiling  { border-color: #ff9f43; color: #ff9f43; }
+.chip-tiling:hover  { border-color: #ffc07a; color: #ffc07a; }
+.chip-analyse { border-color: #e056fd; color: #e056fd; }
+.chip-analyse:hover { border-color: #f580ff; color: #f580ff; }
+.chip-render  { border-color: #ff6b6b; color: #ff6b6b; }
+.chip-render:hover  { border-color: #ff9999; color: #ff9999; }
+
+/* header actions */
+.header-actions { display: flex; gap: 4px; }
 
 /* enhance button */
 .enhance-btn {
@@ -210,6 +219,102 @@ html, body {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* mic button */
+.mic-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 0 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  align-self: flex-end;
+  height: 36px;
+  flex-shrink: 0;
+}
+.mic-btn:hover { border-color: var(--accent); color: var(--accent); }
+.mic-btn.mic-active {
+  border-color: var(--danger);
+  color: var(--danger);
+  animation: micPulse 1s ease-in-out infinite;
+}
+.mic-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+@keyframes micPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* preset folders modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+.modal.hidden { display: none; }
+.modal-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  width: 90%;
+  max-width: 380px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title { font-weight: 600; font-size: 13px; }
+.modal-body { padding: 12px 14px; overflow-y: auto; }
+.modal-hint { font-size: 11px; color: var(--muted); margin: 0 0 10px; line-height: 1.5; }
+.folder-add-row { display: flex; gap: 6px; margin-bottom: 10px; }
+.folder-input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  color: var(--text);
+  font-size: 11px;
+}
+.folder-input::placeholder { color: var(--muted); }
+.btn-sm { padding: 6px 10px; font-size: 11px; }
+.folder-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.folder-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  gap: 6px;
+}
+.folder-path { font-size: 11px; color: var(--text); word-break: break-all; flex: 1; }
+.folder-remove {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.folder-remove:hover { color: var(--danger); }
+.folder-empty { font-size: 11px; color: var(--muted); padding: 4px 0; }
+.preset-count { font-size: 11px; color: var(--accent); margin-top: 8px; }
 
 /* input row */
 .input-row {

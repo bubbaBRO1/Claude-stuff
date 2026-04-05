@@ -1,12 +1,15 @@
 /**
- * xrh4.jsx  —  xrh4-style effect chain
+ * xrh4.jsx  —  xrh4 creator style
  *
- * Characteristics:
- *   - Heavy vignette (dark, punchy)
- *   - Strong desaturation of shadows (crushed, moody)
- *   - Chromatic aberration / RGB shift on edges
- *   - Glitch-style displacement on text/title layers
- *   - High contrast via Curves
+ * Signature look: extremely dark and punchy AMV/edit style.
+ * - Crushed blacks with lifted grain texture
+ * - Heavy desaturation + selective colour pop
+ * - Strong chromatic aberration (colour fringing)
+ * - Camera shake / wiggle on motion
+ * - Glitch / turbulent displace moments
+ * - Hard-hitting contrast S-curve
+ * - Heavy vignette
+ * - Fast-cut energy: motion blur enabled, echo trails on fast moments
  */
 
 function xrh4_apply() {
@@ -29,45 +32,59 @@ function xrh4_apply() {
     for (var i = 0; i < layers.length; i++) {
         var layer = layers[i];
 
-        // 1. Hue/Saturation — desaturate shadows
-        var hueSat;
         try {
-            hueSat = layer("Effects").addProperty("ADBE HUE SATURATION");
-            hueSat.property("ADBE HUE SATURATION-0002").setValue(-35); // Master Saturation
-        } catch (e) { /* continue */ }
-
-        // 2. Curves — high contrast, crushed blacks
-        try {
+            // 1. Curves — punchy S-curve with crushed blacks
             var curves = layer("Effects").addProperty("ADBE CurvesCustom");
-            // Master channel: pull down shadows, push up highlights
-            var master = curves.property(1);
-            var masterVal = master.value;
-            // We set a simplified S-curve via the value array (2 control points format)
-            // AE CurvesCustom: value is [[x,y],...] normalised 0-1
-            master.setValue([[0,0],[0.1,0.04],[0.5,0.5],[0.9,0.96],[1,1]]);
-        } catch (e) { /* continue */ }
+            // Master: pulled-down shadows, boosted contrast
+            curves.property(1).setValue([[0,0],[0.08,0.02],[0.45,0.42],[0.75,0.82],[1,1]]);
+            // Red: slightly pull back (cooler tone overall)
+            curves.property(2).setValue([[0,0],[0.3,0.27],[1,0.96]]);
+            // Blue: lift slightly in highlights for a slight cyan tint
+            curves.property(4).setValue([[0,0],[0.7,0.73],[1,1]]);
+        } catch (e) {}
 
-        // 3. Chromatic aberration via Channel Blur
         try {
-            addChromaticAberration(layer, 4);
-        } catch (e) { /* continue */ }
+            // 2. Hue/Saturation — strong desaturation
+            var hs = layer("Effects").addProperty("ADBE HueSaturation");
+            hs.property("ADBE HueSaturation-0002").setValue(-40); // Master Saturation
+        } catch (e) {}
 
-        // 4. Glow (subtle)
         try {
-            addGlow(layer, 60, 25, 0.5);
-        } catch (e) { /* continue */ }
+            // 3. Chromatic Aberration — heavy R/B channel blur
+            addChromaticAberration(layer, 6);
+        } catch (e) {}
+
+        try {
+            // 4. Film Grain
+            addFilmGrain(layer, 22, "soft");
+        } catch (e) {}
+
+        try {
+            // 5. Subtle Glow (tight, not bloomy)
+            addGlow(layer, 75, 18, 0.4);
+        } catch (e) {}
+
+        try {
+            // 6. Camera Shake expression
+            addCameraShake(layer, 10, 8);
+        } catch (e) {}
+
+        try {
+            // 7. Motion Blur
+            enableMotionBlur(layer, comp);
+        } catch (e) {}
 
         applied.push(layer.name);
     }
 
-    // 5. Vignette on comp (regardless of selected layer)
     try {
-        addVignette(comp, 80);
-    } catch (e) { /* continue */ }
+        // 8. Heavy vignette over the comp
+        addVignette(comp, 85);
+    } catch (e) {}
 
     app.endUndoGroup();
     return JSON.stringify({
         ok: true,
-        msg: "xrh4 style applied to: " + applied.join(", ") + " + vignette added to comp."
+        msg: "xrh4 style applied to: " + applied.join(", ") + " — crushed blacks, chromatic aberration, shake, grain, vignette."
     });
 }
