@@ -2,16 +2,16 @@
 import { useState } from "react";
 import type { Lead } from "@/types";
 import Badge, { statusColor } from "../ui/Badge";
-import Button from "../ui/Button";
 import { useToast } from "../ui/Toast";
 
 interface Props {
   leads: Lead[];
   onEdit: (lead: Lead) => void;
+  onCall: (lead: Lead) => void;
   onRefresh: () => void;
 }
 
-export default function LeadTable({ leads, onEdit, onRefresh }: Props) {
+export default function LeadTable({ leads, onEdit, onCall, onRefresh }: Props) {
   const { toast } = useToast();
   const [deleting, setDeleting] = useState<string | null>(null);
 
@@ -44,7 +44,7 @@ export default function LeadTable({ leads, onEdit, onRefresh }: Props) {
       <table className="w-full text-xs">
         <thead>
           <tr className="border-b border-zinc-800">
-            {["Name", "Company", "Phone", "Email", "Industry", "Status", ""].map((h) => (
+            {["Name", "Company", "Phone", "Email", "Industry", "Status", "Actions"].map((h) => (
               <th
                 key={h}
                 className="px-3 py-2.5 text-left text-[10px] uppercase tracking-widest text-zinc-600 whitespace-nowrap"
@@ -70,6 +70,13 @@ export default function LeadTable({ leads, onEdit, onRefresh }: Props) {
               </td>
               <td className="px-3 py-2.5">
                 <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => onCall(lead)}
+                    className="text-zinc-600 hover:text-[#00ff88] p-1 rounded transition-colors"
+                    title="Call — generate AI script + dial"
+                  >
+                    📞
+                  </button>
                   <button
                     onClick={() => onEdit(lead)}
                     className="text-zinc-600 hover:text-zinc-200 p-1 rounded transition-colors"

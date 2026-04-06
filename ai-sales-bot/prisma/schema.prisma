@@ -22,6 +22,7 @@ model Lead {
   source     String?
   createdAt  DateTime   @default(now())
   deliveries Delivery[]
+  callLogs   CallLog[]
 }
 
 model Campaign {
@@ -54,4 +55,14 @@ model ChatMessage {
   role      String
   content   String
   createdAt DateTime @default(now())
+}
+
+model CallLog {
+  id        String   @id @default(cuid())
+  leadId    String
+  script    String
+  notes     String?
+  outcome   String   @default("pending")
+  createdAt DateTime @default(now())
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
 }

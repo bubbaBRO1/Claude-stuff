@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import type { Lead } from "@/types";
 import LeadTable from "@/components/leads/LeadTable";
 import LeadForm from "@/components/leads/LeadForm";
+import CallModal from "@/components/leads/CallModal";
 import Button from "@/components/ui/Button";
 import Skeleton from "@/components/ui/Skeleton";
 
@@ -11,6 +12,7 @@ export default function LeadsPage() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editLead, setEditLead] = useState<Lead | null>(null);
+  const [callLead, setCallLead] = useState<Lead | null>(null);
   const [search, setSearch] = useState("");
 
   const load = useCallback(async () => {
@@ -25,7 +27,7 @@ export default function LeadsPage() {
     load();
   }, [load]);
 
-  const handleSaved = (lead: Lead) => {
+  const handleSaved = () => {
     setShowForm(false);
     setEditLead(null);
     load();
@@ -61,6 +63,7 @@ export default function LeadsPage() {
           <LeadTable
             leads={leads}
             onEdit={(lead) => { setEditLead(lead); setShowForm(true); }}
+            onCall={(lead) => setCallLead(lead)}
             onRefresh={load}
           />
         )}
@@ -72,6 +75,14 @@ export default function LeadsPage() {
           lead={editLead}
           onClose={() => { setShowForm(false); setEditLead(null); }}
           onSaved={handleSaved}
+        />
+      )}
+
+      {/* call modal */}
+      {callLead && (
+        <CallModal
+          lead={callLead}
+          onClose={() => { setCallLead(null); load(); }}
         />
       )}
     </div>

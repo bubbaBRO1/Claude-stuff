@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { sendSMS, formatPhone } from "@/lib/twilio";
+import { sendSMS, formatPhone } from "@/lib/sms";
 import { sendEmail } from "@/lib/mailer";
 
 export async function POST(req: NextRequest) {
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
             data: { leadId: lead.id, campaignId, channel: "sms", status: "pending" },
           });
           try {
-            await sendSMS(formatPhone(lead.phone!), campaign.enhancedPrompt);
+            await sendSMS(lead.phone!, campaign.enhancedPrompt);
             await db.delivery.update({
               where: { id: deliveryRecord.id },
               data: { status: "sent", sentAt: new Date() },
