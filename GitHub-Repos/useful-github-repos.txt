@@ -1,0 +1,287 @@
+====================================================================
+  USEFUL GITHUB REPOS — GlowUp & Related Projects
+  Generated: May 2026
+  Project Stack: Next.js · React 19 · TypeScript · Prisma · SQLite
+                 face-api.js · Framer Motion · dnd-kit · Recharts · PWA
+====================================================================
+
+NOTE: No Obsidian vault was detected in this remote environment.
+Save this file manually to your vault at the path:
+  [YourVault]/Resources/GitHub-Repos/useful-github-repos.md
+
+--------------------------------------------------------------------
+  SECTION 1 — UI COMPONENT LIBRARIES
+--------------------------------------------------------------------
+
+1. shadcn/ui
+   URL:   https://github.com/shadcn-ui/ui
+   Stars: ~114k
+   WHAT:  Copy-paste component library built on Radix UI + Tailwind CSS.
+          Unlike traditional libraries, you own the code — components live
+          in your repo. Perfect for GlowUp's custom design system. Includes
+          charts, dialogs, tooltips, forms, and 50+ components.
+   WHY:   Zero runtime overhead. Pairs perfectly with Tailwind v4 you already use.
+
+2. radix-ui/primitives
+   URL:   https://github.com/radix-ui/primitives
+   Stars: ~17k
+   WHAT:  Headless, fully accessible React UI primitives (Dialog, Dropdown,
+          Tooltip, Popover, Accordion, etc.). Unstyled — you bring your own CSS.
+          Powers shadcn/ui under the hood.
+   WHY:   Handles keyboard nav, screen readers, focus traps — accessibility for free.
+
+3. mantinedev/mantine
+   URL:   https://github.com/mantinedev/mantine
+   Stars: ~30k+
+   WHAT:  React component library with 120+ components and 100+ hooks.
+          Full dark/light mode, form management, notifications, modals,
+          date pickers, and rich text editor all included.
+   WHY:   Best DX of any component lib. The hook collection alone is worth it.
+
+4. heroui-inc/heroui
+   URL:   https://github.com/heroui-inc/heroui
+   Stars: ~22k+
+   WHAT:  Formerly NextUI. Visually stunning React component library built
+          on Tailwind CSS and React Aria. Beautiful animations and a modern
+          aesthetic that suits apps like GlowUp well.
+   WHY:   Gorgeous out-of-the-box styling. Great for gamified/lifestyle apps.
+
+--------------------------------------------------------------------
+  SECTION 2 — ANIMATION
+--------------------------------------------------------------------
+
+5. motiondivision/motion
+   URL:   https://github.com/motiondivision/motion
+   Stars: ~28k+
+   WHAT:  The official home of Framer Motion (now called "Motion"). Import
+          from `motion/react` instead of `framer-motion`. Provides layout
+          animations, gestures, scroll animations, and 330+ examples.
+   WHY:   You already use framer-motion — this IS the updated package.
+          Migrating gives you better tree-shaking and smaller bundles.
+
+--------------------------------------------------------------------
+  SECTION 3 — DATA VISUALIZATION & CHARTS
+--------------------------------------------------------------------
+
+6. recharts/recharts
+   URL:   https://github.com/recharts/recharts
+   Stars: ~24k
+   WHAT:  Composable charting library built on React + D3. Area, Bar, Line,
+          Pie, Radar, Radial charts and more. Already used in GlowUp.
+   WHY:   You're already on it — star it and watch releases for v3 updates.
+
+7. apache/echarts
+   URL:   https://github.com/apache/echarts
+   Stars: ~61k
+   WHAT:  Powerful charting and visualization library originally by Baidu.
+          Handles massive datasets, 3D charts, heatmaps, and complex
+          dashboards. Has a React wrapper: echarts-for-react.
+   WHY:   If Recharts hits limits, ECharts scales much further.
+
+8. airbnb/visx
+   URL:   https://github.com/airbnb/visx
+   Stars: ~19k
+   WHAT:  Collection of low-level React + D3 visualization primitives from
+          Airbnb. Shapes, scales, axes, grids, legends — all composable.
+          Maximum control, zero opinions on styling.
+   WHY:   Use this when you need pixel-perfect custom charts (e.g. rank graphs).
+
+--------------------------------------------------------------------
+  SECTION 4 — FACE DETECTION & COMPUTER VISION
+--------------------------------------------------------------------
+
+9. justadudewhohacks/face-api.js
+   URL:   https://github.com/justadudewhohacks/face-api.js
+   Stars: ~17k
+   WHAT:  JavaScript face detection and recognition API for the browser,
+          built on TensorFlow.js. 99.38% accuracy on LFW benchmark.
+          Detects age, gender, expressions, landmarks. Already in GlowUp.
+   WHY:   Your scan feature relies on this. Watch the repo for model updates.
+
+10. tensorflow/tfjs
+    URL:   https://github.com/tensorflow/tfjs
+    Stars: ~18k
+    WHAT:  TensorFlow for JavaScript — run ML models directly in the browser
+           or Node.js via WebGL/WebAssembly. Powers face-api.js under the hood.
+           Access to thousands of pre-trained models via TF Hub.
+    WHY:   If you expand beyond faces (pose detection, body analysis), use this.
+
+11. serengil/deepface
+    URL:   https://github.com/serengil/deepface
+    Stars: ~16k
+    WHAT:  Python library for face recognition with age, gender, emotion, and
+           race analysis. Can be run as an API server that your Next.js app
+           calls. More powerful than face-api.js for backend analysis.
+    WHY:   If you add a server-side scan or batch analysis feature.
+
+--------------------------------------------------------------------
+  SECTION 5 — DATABASE & BACKEND
+--------------------------------------------------------------------
+
+12. prisma/prisma
+    URL:   https://github.com/prisma/prisma
+    Stars: ~40k
+    WHAT:  Next-gen ORM for Node.js and TypeScript. Prisma Client provides
+           type-safe database queries. Supports SQLite, PostgreSQL, MySQL,
+           MongoDB, and more. Already the backbone of GlowUp.
+    WHY:   You're already using it. Follow this repo for v8+ SQLite improvements.
+
+13. prisma/prisma-examples
+    URL:   https://github.com/prisma/prisma-examples
+    Stars: ~6k
+    WHAT:  Ready-to-run Prisma example projects covering REST, GraphQL,
+           fullstack Next.js, authentication, real-time, and more.
+    WHY:   Great reference when adding new features (e.g. auth, API routes).
+
+--------------------------------------------------------------------
+  SECTION 6 — AUTHENTICATION
+--------------------------------------------------------------------
+
+14. nextauthjs/next-auth
+    URL:   https://github.com/nextauthjs/next-auth
+    Stars: ~26k
+    WHAT:  Complete authentication solution for Next.js. Supports OAuth
+           (Google, GitHub, Discord, etc.), magic links, credentials.
+           Works directly with Prisma adapter.
+    WHY:   When GlowUp needs user accounts / social login — this is the go-to.
+
+--------------------------------------------------------------------
+  SECTION 7 — DRAG & DROP
+--------------------------------------------------------------------
+
+15. clauderic/dnd-kit
+    URL:   https://github.com/clauderic/dnd-kit
+    Stars: ~14k
+    WHAT:  Modern, lightweight, and performant drag-and-drop toolkit for
+           React. Supports sortable lists, grids, virtual lists, and
+           multi-container. Already used in GlowUp's routine/task features.
+    WHY:   You're already on it. Check the docs for advanced collision
+           detection for your shop/achievement reordering.
+
+--------------------------------------------------------------------
+  SECTION 8 — GAMIFICATION & ACHIEVEMENTS
+--------------------------------------------------------------------
+
+16. fedemartinm/react-award
+    URL:   https://github.com/fedemartinm/react-award
+    Stars: ~300+
+    WHAT:  React component for rewarding users when they hit achievements.
+           Supports Lottie animations, confetti, and custom reward displays.
+    WHY:   Direct plug-in for GlowUp's achievement unlock moments.
+
+17. catdad/canvas-confetti
+    URL:   https://github.com/catdad/canvas-confetti
+    Stars: ~10k
+    WHAT:  Highly performant confetti animations on HTML5 canvas. Supports
+           emoji, custom shapes, fireworks presets, and more. Already in GlowUp.
+    WHY:   You're already using it — explore emoji confetti and fireworks for
+           milestone celebrations.
+
+--------------------------------------------------------------------
+  SECTION 9 — HABIT TRACKING & PRODUCTIVITY
+--------------------------------------------------------------------
+
+18. nicopanozo/react-habit-tracker
+    URL:   https://github.com/nicopanozo/react-habit-tracker
+    Stars: ~500+
+    WHAT:  Feature-rich habit tracking app built with React and TypeScript.
+           Weekly tracking checkboxes, progress visualization, streak
+           tracking, filtering, search, dark/light mode, and localStorage.
+    WHY:   Reference implementation for GlowUp's routine and habit features.
+
+19. braiekhazem/react-kanban-kit
+    URL:   https://github.com/braiekhazem/react-kanban-kit
+    Stars: ~400+
+    WHAT:  Flexible Kanban board built with TypeScript and Atlassian's
+           pragmatic-drag-and-drop. Drag cards and columns, responsive,
+           virtual scrolling for large lists.
+    WHY:   Good reference for organizing GlowUp's goal/routine boards.
+
+--------------------------------------------------------------------
+  SECTION 10 — PWA
+--------------------------------------------------------------------
+
+20. shadowwalker/next-pwa
+    URL:   https://github.com/shadowwalker/next-pwa
+    Stars: ~4k
+    WHAT:  Zero-config PWA plugin for Next.js. Adds service workers, offline
+           support, push notifications, and app manifest auto-generation.
+           Already used in GlowUp.
+    WHY:   You're on it. For Next.js 15+, consider migrating to `@ducanh2912/next-pwa`
+           (the actively maintained fork).
+
+21. ducanh2912/next-pwa (fork — actively maintained)
+    URL:   https://github.com/DuCanhGH/next-pwa
+    Stars: ~1.5k
+    WHAT:  Modern fork of shadowwalker/next-pwa with full support for
+           Next.js 14/15/16, App Router, TypeScript, and Serwist.
+    WHY:   The original next-pwa is no longer actively maintained. This
+           fork is the community-recommended replacement.
+
+--------------------------------------------------------------------
+  SECTION 11 — AI & WORKFLOW
+--------------------------------------------------------------------
+
+22. langgenius/dify
+    URL:   https://github.com/langgenius/dify
+    Stars: ~80k+
+    WHAT:  Open-source LLM app development platform. Build AI-powered
+           features (chatbots, agents, RAG pipelines) with a visual
+           workflow builder. REST API for easy integration into Next.js.
+    WHY:   For GlowUp's AI coach feature — hook it up for personalized advice.
+
+23. n8n-io/n8n
+    URL:   https://github.com/n8n-io/n8n
+    Stars: ~50k+
+    WHAT:  Workflow automation platform (like Zapier but open-source, self-hosted).
+           400+ integrations. Can trigger on Prisma DB events, send notifications,
+           run AI pipelines, connect to health APIs.
+    WHY:   Automate GlowUp background tasks: reminders, progress reports, syncs.
+
+--------------------------------------------------------------------
+  SECTION 12 — FULL-STACK STARTERS & REFERENCE
+--------------------------------------------------------------------
+
+24. t3-oss/create-t3-app
+    URL:   https://github.com/t3-oss/create-t3-app
+    Stars: ~26k
+    WHAT:  Best-practice Next.js starter bundling TypeScript, tRPC, Prisma,
+           NextAuth, and Tailwind. The "T3 Stack" — opinionated, production-ready.
+    WHY:   Gold-standard reference for Next.js + Prisma + TypeScript patterns.
+
+25. birobirobiro/awesome-shadcn-ui
+    URL:   https://github.com/birobirobiro/awesome-shadcn-ui
+    Stars: ~8k
+    WHAT:  Curated mega-list of everything built on shadcn/ui: templates,
+           components, blocks, themes, plugins, and starter kits.
+    WHY:   One-stop shop for finding pre-built pieces that fit GlowUp's design.
+
+====================================================================
+  QUICK REFERENCE — BY USE CASE
+====================================================================
+
+  Scanning / Face AI   → face-api.js (#9), tfjs (#10), deepface (#11)
+  Charts / Stats       → Recharts (#6), ECharts (#7), visx (#8)
+  Achievements / XP    → react-award (#16), canvas-confetti (#17)
+  Routines / Habits    → react-habit-tracker (#18), react-kanban-kit (#19)
+  Animations           → motion (#5)
+  UI Components        → shadcn/ui (#1), Radix UI (#2), Mantine (#3)
+  Database / ORM       → Prisma (#12), prisma-examples (#13)
+  Auth                 → NextAuth (#14)
+  Drag & Drop          → dnd-kit (#15)
+  PWA / Offline        → next-pwa fork (#21)
+  AI Coach Feature     → Dify (#22)
+  Automation           → n8n (#23)
+  Reference Stack      → create-t3-app (#24)
+
+====================================================================
+  OBSIDIAN NOTE
+====================================================================
+
+  No Obsidian vault was found in this remote environment.
+  To save this to your vault:
+    1. Copy this file to: [YourVault]/Resources/GitHub-Repos/
+    2. Rename to: useful-github-repos.md
+    3. The format is already Markdown-compatible.
+
+====================================================================
