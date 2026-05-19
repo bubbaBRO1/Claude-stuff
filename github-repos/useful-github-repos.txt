@@ -1,0 +1,326 @@
+====================================================================
+  USEFUL GITHUB REPOS — Curated for the GlowUp Project
+  Stack: Next.js 16 · React 19 · TypeScript · Tailwind CSS v4
+         Prisma · Framer Motion · dnd-kit · recharts · face-api.js
+  Generated: 2026-05-19
+====================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  UI COMPONENTS & DESIGN SYSTEMS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. shadcn-ui/ui
+   URL:     https://github.com/shadcn-ui/ui
+   Stars:   114,000+
+   What:    A set of beautifully-designed, accessible React components
+            built on Radix UI and styled with Tailwind CSS. Not a
+            package you install — you copy individual components
+            directly into your codebase and own them fully. Covers
+            buttons, dialogs, forms, data tables, calendars, and
+            everything in between. Works perfectly with Next.js.
+   Why:     Drop-in, customizable components for GlowUp's UI without
+            locking you into a design system you can't modify.
+
+2. magicuidesign/magicui
+   URL:     https://github.com/magicuidesign/magicui
+   Stars:   21,000+
+   What:    Animated React components built with Framer Motion,
+            Tailwind CSS, and shadcn/ui. Includes shiny buttons,
+            animated text gradients, bento grids, border beams,
+            sparkle effects, and other "wow" effects — all
+            copy-paste ready, no npm install needed.
+   Why:     Perfect for adding polish and "glowup"-style visual flair
+            to your achievement screens, XP animations, and shop.
+
+3. ibelick/motion-primitives
+   URL:     https://github.com/ibelick/motion-primitives
+   Stars:   5,500+
+   What:    A UI kit of beautifully animated interface components
+            powered by Framer Motion. Includes cursor effects,
+            text reveals, animated lists, stagger transitions, and
+            smooth layout animations — all customizable and
+            open source.
+   Why:     Complements your existing Framer Motion usage with
+            ready-made animated patterns for GlowUp's coaching,
+            focus, and routine screens.
+
+4. nolly-studio/cult-ui
+   URL:     https://github.com/nolly-studio/cult-ui
+   Stars:   4,500+
+   What:    Components crafted for "design engineers" — styled with
+            Tailwind, fully compatible with shadcn/ui, and powered
+            by Framer Motion. Unique components like animated cards,
+            glowing borders, and dark-mode-first aesthetics. Copy
+            and paste, MIT licensed.
+   Why:     Great companion for GlowUp's dark-mode design; the
+            components feel premium without extra dependencies.
+
+5. themesberg/flowbite
+   URL:     https://github.com/themesberg/flowbite
+   Stars:   9,200+
+   What:    Open-source Tailwind CSS component library and front-end
+            framework. Provides 600+ UI blocks — navbars, modals,
+            tables, timelines, carousels — all built on Tailwind CSS.
+            Has a React-specific package (flowbite-react).
+   Why:     Backup component reference when you need a quick
+            pre-built pattern for GlowUp's forms, modals, or
+            settings pages.
+
+6. saadeghi/daisyui
+   URL:     https://github.com/saadeghi/daisyui
+   Stars:   41,000+
+   What:    The most popular Tailwind CSS component library. Adds
+            semantic class names (btn, card, badge, etc.) as a
+            Tailwind plugin, so you get pre-built themes — including
+            dark themes — without leaving Tailwind's utility-first
+            workflow. 35+ built-in themes.
+   Why:     Ultra-fast prototyping for new GlowUp features; the
+            theming system is great for quickly testing light/dark
+            variants.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CORE FRAMEWORK & TOOLING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+7. vercel/next.js
+   URL:     https://github.com/vercel/next.js
+   Stars:   139,000+
+   What:    The React framework powering GlowUp. Server components,
+            app router, streaming, image optimization, API routes,
+            middleware, and more. The source of truth for what is and
+            isn't supported in your exact version (16.2.1).
+   Why:     The actual source repo — essential for reading changelogs,
+            checking breaking changes, and tracking upcoming features
+            relevant to your build.
+
+8. tailwindlabs/tailwindcss
+   URL:     https://github.com/tailwindlabs/tailwindcss
+   Stars:   95,000+
+   What:    The utility-first CSS framework you're using (v4). v4 is
+            a full rewrite — it uses a CSS-native engine instead of a
+            config file, has faster build times, and introduces new
+            syntax. The repo includes all migration guides and the
+            CSS engine source.
+   Why:     You're on v4, which has breaking changes from v3.
+            Tracking this repo keeps you ahead of any issues in your
+            PostCSS pipeline.
+
+9. prisma/prisma
+   URL:     https://github.com/prisma/prisma
+   Stars:   46,000+
+   What:    The ORM you're already using. Provides Prisma Client
+            (type-safe database access), Prisma Migrate (schema
+            migrations), Prisma Studio (GUI to explore data), and
+            adapters for multiple databases including SQLite (your
+            setup).
+   Why:     Your entire data layer depends on this. Watching releases
+            helps you catch fixes for the better-sqlite3 adapter and
+            the new Prisma 7 client generation format you're using.
+
+10. t3-oss/create-t3-app
+    URL:     https://github.com/t3-oss/create-t3-app
+    Stars:   29,000+
+    What:    The best-practice scaffold for a full-stack, type-safe
+             Next.js app. Combines Next.js + Prisma + Tailwind CSS +
+             NextAuth + tRPC into a single cohesive setup. Excellent
+             reference for how these tools are wired together.
+    Why:     GlowUp uses 3 of the 5 T3 stack technologies. This repo
+             is a blueprint for patterns you can pull into your own
+             project (auth setup, API patterns, db integration).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  DATA, APIs & BACKEND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+11. trpc/trpc
+    URL:     https://github.com/trpc/trpc
+    Stars:   40,000+
+    What:    End-to-end typesafe API layer for TypeScript apps.
+             Instead of REST or GraphQL, tRPC lets you call server
+             functions from the client with full type inference —
+             no code generation needed. Works beautifully with
+             Next.js App Router and Prisma.
+    Why:     If GlowUp ever needs a proper API layer (multi-device
+             sync, sharing features), tRPC is the cleanest way to
+             add it while staying fully type-safe.
+
+12. supabase/supabase
+    URL:     https://github.com/supabase/supabase
+    Stars:   103,000+
+    What:    Open-source Firebase alternative built on Postgres.
+             Provides auth, real-time subscriptions, file storage,
+             edge functions, and a vector database — all with a
+             generous free tier and excellent Next.js support.
+    Why:     When GlowUp needs to go from local SQLite to cloud
+             (user accounts, sync across devices), Supabase is the
+             fastest path with minimal architecture changes.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  DRAG & DROP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+13. clauderic/dnd-kit
+    URL:     https://github.com/clauderic/dnd-kit
+    Stars:   17,000+
+    What:    The modern drag-and-drop toolkit for React — the exact
+             library GlowUp already uses (@dnd-kit/core, @dnd-kit/
+             sortable). Lightweight, performant, accessible, and
+             supports touch/pointer events. Includes virtualization
+             support for large lists.
+    Why:     Your routine steps and habit lists already use this.
+             The repo's examples are the best reference for advanced
+             patterns like multi-container drag or nested sortable.
+
+14. Georgegriff/react-dnd-kit-tailwind-shadcn-ui
+    URL:     https://github.com/Georgegriff/react-dnd-kit-tailwind-shadcn-ui
+    Stars:   800+
+    What:    A fully accessible, production-ready Kanban board built
+             with exactly your stack: React + dnd-kit + Tailwind CSS
+             + shadcn/ui. Shows multi-column drag and drop, keyboard
+             navigation, and ARIA attributes done right.
+    Why:     A perfect reference if you want to add a Kanban-style
+             view to GlowUp's goals or routine planning features.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  DATA VISUALIZATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+15. recharts/recharts
+    URL:     https://github.com/recharts/recharts
+    Stars:   27,000+
+    What:    The chart library GlowUp already uses. Built on React
+             and D3, it provides composable chart components —
+             LineChart, BarChart, RadarChart, AreaChart — with full
+             TypeScript support and responsive container wrapping.
+    Why:     Your stats dashboards (sleep, water, XP, habits) all run
+             on this. The repo has an extensive Storybook with real
+             examples for every chart type and edge case.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ANIMATIONS & VISUAL EFFECTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+16. tsparticles/tsparticles
+    URL:     https://github.com/tsparticles/tsparticles
+    Stars:   8,800+
+    What:    JavaScript library for creating highly customizable
+             particle effects, confetti explosions, and fireworks
+             animations on canvas. Has first-class React components
+             (@tsparticles/react). Much more powerful than
+             canvas-confetti for complex celebration effects.
+    Why:     Level-up GlowUp's achievement and XP reward moments
+             with custom particle/confetti bursts beyond what
+             canvas-confetti alone can do.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FACE & AI / COMPUTER VISION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+17. justadudewhohacks/face-api.js
+    URL:     https://github.com/justadudewhohacks/face-api.js
+    Stars:   17,800+
+    What:    The face detection library GlowUp already uses. Built
+             on TensorFlow.js; runs entirely in the browser. Detects
+             faces, landmarks, expressions (happy, sad, angry, etc.),
+             age, and gender — no server required. Includes pre-trained
+             models for all these tasks.
+    Why:     Your photo analysis / journal image feature depends on
+             this. The repo's examples show the best model-loading
+             patterns and how to minimize initial load time.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PRODUCTIVITY & HABIT-TRACKING INSPIRATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+18. super-productivity/super-productivity
+    URL:     https://github.com/super-productivity/super-productivity
+    Stars:   19,500+
+    What:    Advanced open-source todo/productivity app with Pomodoro
+             timer, time tracking, habit tracking, GitHub/GitLab
+             integration, and a gamified task flow. Built with
+             TypeScript and Electron (desktop + PWA).
+    Why:     The most feature-complete open-source productivity app
+             available. A goldmine for UX patterns in GlowUp's
+             focus sessions, habit streaks, and routine logging.
+
+19. iSoron/uhabits
+    URL:     https://github.com/iSoron/uhabits
+    Stars:   9,900+
+    What:    Loop Habit Tracker — the gold-standard open-source
+             Android habit tracker. Has beautifully designed streak
+             heatmaps, habit score calculations, statistical
+             visualizations, and reminder systems. Written in Kotlin.
+    Why:     Even though it's Android/Kotlin, the UX patterns — habit
+             scoring, streak visualization, and "habit strength"
+             modeling — are directly applicable to GlowUp's habit
+             and XP systems.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FULL-STACK NEXT.JS REFERENCE APPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+20. calcom/cal.diy
+    URL:     https://github.com/calcom/cal.diy
+    Stars:   43,000+
+    What:    Open-source scheduling platform (formerly cal.com).
+             Large-scale production Next.js + Prisma + Tailwind +
+             tRPC + NextAuth monorepo. Shows how to structure
+             complex Next.js apps with multiple packages, handle
+             auth, build real-time features, and scale Prisma.
+    Why:     The best large-scale reference app that shares all of
+             GlowUp's core dependencies. Study its folder structure,
+             API patterns, and how it handles auth flows.
+
+21. dubinc/dub
+    URL:     https://github.com/dubinc/dub
+    Stars:   23,500+
+    What:    Modern open-source link management platform. Built with
+             Next.js, Prisma, Tailwind CSS, and Vercel. Shows
+             production-grade Next.js App Router patterns, edge
+             middleware, analytics dashboards, and team features.
+    Why:     A clean, well-architected production Next.js codebase
+             using your exact stack. Great for studying app router
+             patterns, loading states, and dashboard design.
+
+22. steven-tey/precedent
+    URL:     https://github.com/steven-tey/precedent
+    Stars:   5,000+
+    What:    An opinionated collection of reusable components, hooks,
+             and utilities for Next.js projects. Includes blur
+             effects, animated counters, hover cards, modal
+             primitives — all built with Framer Motion, Radix UI,
+             Tailwind, Prisma, and NextAuth.
+    Why:     A curated starter kit that matches GlowUp's exact stack.
+             Pull individual hooks (useLocalStorage, useIntersection-
+             Observer) and animation utilities directly into your app.
+
+====================================================================
+  SUMMARY TABLE
+====================================================================
+
+ #  | Repo                                  | Stars  | Category
+----|---------------------------------------|--------|------------------
+ 1  | shadcn-ui/ui                          | 114k   | UI Components
+ 2  | magicuidesign/magicui                 | 21k    | Animated UI
+ 3  | ibelick/motion-primitives             | 5.5k   | Animations
+ 4  | nolly-studio/cult-ui                  | 4.5k   | Animated UI
+ 5  | themesberg/flowbite                   | 9.2k   | UI Components
+ 6  | saadeghi/daisyui                      | 41k    | Tailwind UI
+ 7  | vercel/next.js                        | 139k   | Framework
+ 8  | tailwindlabs/tailwindcss              | 95k    | CSS Framework
+ 9  | prisma/prisma                         | 46k    | ORM / Database
+10  | t3-oss/create-t3-app                  | 29k    | Scaffold / Boiler
+11  | trpc/trpc                             | 40k    | Type-safe API
+12  | supabase/supabase                     | 103k   | Backend / Auth
+13  | clauderic/dnd-kit                     | 17k    | Drag & Drop
+14  | Georgegriff/react-dnd-kit-shadcn      | 800    | Drag & Drop
+15  | recharts/recharts                     | 27k    | Data Viz
+16  | tsparticles/tsparticles               | 8.8k   | Particles/Confetti
+17  | justadudewhohacks/face-api.js         | 17.8k  | Face / AI
+18  | super-productivity/super-productivity | 19.5k  | Productivity App
+19  | iSoron/uhabits                        | 9.9k   | Habit Tracker
+20  | calcom/cal.diy                        | 43k    | Next.js Reference
+21  | dubinc/dub                            | 23.5k  | Next.js Reference
+22  | steven-tey/precedent                  | 5k     | Next.js Starter
+
+====================================================================
