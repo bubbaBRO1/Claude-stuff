@@ -1,0 +1,226 @@
+========================================================
+  USEFUL GITHUB REPOS — Curated for Your Projects
+  GlowUp App Stack: Next.js · TypeScript · Tailwind
+  Prisma · Framer Motion · React · face-api.js · PWA
+  Generated: 2026-05-22
+========================================================
+
+--- UI COMPONENTS & DESIGN SYSTEMS ---
+
+1. shadcn-ui/ui  ⭐ 114,875
+   URL: https://github.com/shadcn-ui/ui
+   WHAT IT DOES: A set of beautifully designed, accessible React components
+   built on Radix UI and Tailwind CSS. Copy-paste components directly into
+   your project (no npm install needed). Works perfectly with Next.js.
+   WHY IT'S USEFUL: Drop-in UI for GlowUp's dashboard, modals, buttons,
+   sliders, and all interactive elements.
+
+2. birobirobiro/awesome-shadcn-ui  ⭐ 19,593
+   URL: https://github.com/birobirobiro/awesome-shadcn-ui
+   WHAT IT DOES: A massive curated list of shadcn/ui extensions, themes,
+   plugins, templates, and community components you can't find in the
+   official library.
+   WHY IT'S USEFUL: Find pre-built GlowUp-style cards, charts, and animated
+   components that extend shadcn.
+
+3. lucide-icons/lucide  ⭐ 22,709
+   URL: https://github.com/lucide-icons/lucide
+   WHAT IT DOES: A beautiful, consistent SVG icon set with 1,000+ icons.
+   Has first-class React support (lucide-react). MIT licensed.
+   WHY IT'S USEFUL: All the icons for your GlowUp app — health, focus,
+   flame, trophy, settings — all in one library.
+
+--- CSS & STYLING ---
+
+4. tailwindlabs/tailwindcss  ⭐ 95,091
+   URL: https://github.com/tailwindlabs/tailwindcss
+   WHAT IT DOES: The utility-first CSS framework your GlowUp project
+   already uses. This is the official repo — great for reading source,
+   checking release notes, and understanding internals.
+   WHY IT'S USEFUL: Stay up to date on v4 changes (you're already on v4).
+
+5. tailwindlabs/prettier-plugin-tailwindcss  ⭐ 7,083
+   URL: https://github.com/tailwindlabs/prettier-plugin-tailwindcss
+   WHAT IT DOES: A Prettier plugin that automatically sorts Tailwind CSS
+   classes in the recommended order, keeping your JSX clean.
+   WHY IT'S USEFUL: Eliminates class-order debates; auto-formats on save.
+
+6. tailwindlabs/tailwindcss-typography  ⭐ 6,376
+   URL: https://github.com/tailwindlabs/tailwindcss-typography
+   WHAT IT DOES: The official Tailwind Typography plugin — adds a `prose`
+   class that applies beautiful typographic defaults to HTML you don't
+   control (markdown renders, blog posts, etc.).
+   WHY IT'S USEFUL: Perfect for GlowUp's coach/tips sections and
+   any markdown-rendered content.
+
+--- DRAG & DROP ---
+
+7. clauderic/dnd-kit  ⭐ 17,148
+   URL: https://github.com/clauderic/dnd-kit
+   WHAT IT DOES: The modern, lightweight drag-and-drop toolkit for React.
+   Supports sorting, grids, trees, and multi-container drag. This is the
+   exact library your GlowUp project already uses (@dnd-kit/*).
+   WHY IT'S USEFUL: Deep reference for sortable lists in your routine
+   and task features.
+
+8. atlassian/react-beautiful-dnd  ⭐ 33,998  [archived]
+   URL: https://github.com/atlassian/react-beautiful-dnd
+   WHAT IT DOES: Atlassian's original drag-and-drop library for lists.
+   Archived but still widely referenced. Beautiful physics-based animations.
+   WHY IT'S USEFUL: Great source for drag animation patterns and
+   accessibility patterns even though dnd-kit is the modern choice.
+
+--- STATE MANAGEMENT & DATA FETCHING ---
+
+9. pmndrs/zustand  ⭐ 58,095
+   URL: https://github.com/pmndrs/zustand
+   WHAT IT DOES: A tiny, fast, scalable React state management library.
+   Uses hooks. No providers, no boilerplate. Only 1kb.
+   WHY IT'S USEFUL: Perfect companion to your Prisma/SQLite backend for
+   client-side state like active timers, UI mode, and user session data.
+
+10. TanStack/query  ⭐ 49,489
+    URL: https://github.com/TanStack/query
+    WHAT IT DOES: Powerful async state management — handles caching,
+    background sync, pagination, and server state for React, Solid, Vue.
+    WHY IT'S USEFUL: Replaces manual fetch/useEffect patterns when calling
+    your Next.js API routes for GlowUp's health and focus data.
+
+--- FORMS & VALIDATION ---
+
+11. react-hook-form/react-hook-form  ⭐ 44,725
+    URL: https://github.com/react-hook-form/react-hook-form
+    WHAT IT DOES: The lightest, fastest React form library. Uses uncontrolled
+    components and hooks — zero re-renders on input change.
+    WHY IT'S USEFUL: GlowUp's profile setup, routine creation, and goal
+    forms all benefit from this.
+
+12. colinhacks/zod  ⭐ 42,751
+    URL: https://github.com/colinhacks/zod
+    WHAT IT DOES: TypeScript-first schema validation with static type
+    inference. Define a schema once, get both runtime validation and TS types.
+    WHY IT'S USEFUL: Validate API inputs in your Next.js route handlers
+    and pair with react-hook-form via @hookform/resolvers.
+
+--- CHARTS & VISUALIZATION ---
+
+13. recharts/recharts  ⭐ 27,157
+    URL: https://github.com/recharts/recharts
+    WHAT IT DOES: A chart library rebuilt with React and D3. Composable,
+    declarative API. Line, bar, area, pie, radar charts and more.
+    WHY IT'S USEFUL: Already used in GlowUp! Reference this repo for
+    advanced customization of your health and focus charts.
+
+--- ANIMATIONS & VISUAL EFFECTS ---
+
+14. motiondivision/motion  ⭐ (see repo)
+    URL: https://github.com/framer/motion
+    WHAT IT DOES: Framer Motion — a production-ready motion library for
+    React. Declarative animations, gestures, drag, scroll, and layout
+    animations. Already in your GlowUp project.
+    WHY IT'S USEFUL: Power all your achievement unlocks, level-up screens,
+    and page transitions.
+
+15. catdad/canvas-confetti  ⭐ 12,582
+    URL: https://github.com/catdad/canvas-confetti
+    WHAT IT DOES: A high-performance confetti animation library that runs
+    on an HTML canvas — fireworks, snow, and confetti bursts.
+    WHY IT'S USEFUL: Already used in GlowUp! Reference for advanced burst
+    patterns when users hit streaks or achievements.
+
+16. tsparticles/tsparticles  ⭐ 8,836
+    URL: https://github.com/tsparticles/tsparticles
+    WHAT IT DOES: Highly customizable particle/confetti/fireworks
+    animation engine. Has first-class React components.
+    WHY IT'S USEFUL: Level-up screens, rank reveal animations, and
+    dynamic backgrounds in your GlowUp app.
+
+--- AUTHENTICATION ---
+
+17. nextauthjs/next-auth  ⭐ 28,243
+    URL: https://github.com/nextauthjs/next-auth
+    WHAT IT DOES: Full-featured authentication library for Next.js.
+    Supports OAuth providers (Google, GitHub, Discord), email magic links,
+    and credentials auth. Works with Prisma adapter.
+    WHY IT'S USEFUL: Add user accounts to GlowUp so users can sync
+    progress across devices.
+
+--- FULL-STACK BOILERPLATES & STARTERS ---
+
+18. t3-oss/create-t3-app  ⭐ 28,935
+    URL: https://github.com/t3-oss/create-t3-app
+    WHAT IT DOES: CLI that scaffolds a full-stack Next.js app with
+    TypeScript, Tailwind, Prisma, NextAuth, and tRPC — all wired together.
+    WHY IT'S USEFUL: Your GlowUp stack is nearly identical. This is the
+    best reference architecture for how to structure your project.
+
+19. ixartz/SaaS-Boilerplate  ⭐ 7,105
+    URL: https://github.com/ixartz/SaaS-Boilerplate
+    WHAT IT DOES: Production-ready SaaS starter with Next.js, Tailwind,
+    shadcn UI, TypeScript, Auth, multi-tenancy, roles, i18n, DB, and
+    logging all pre-configured.
+    WHY IT'S USEFUL: If GlowUp ever goes multi-user/commercial, this
+    is the template to start from.
+
+20. shadcn-ui/taxonomy  ⭐ 19,231
+    URL: https://github.com/shadcn-ui/taxonomy
+    WHAT IT DOES: A reference open-source app built with Next.js 13 App
+    Router, server components, Prisma, Tailwind, shadcn, and NextAuth.
+    WHY IT'S USEFUL: Real-world reference for how to wire up the exact
+    same stack as GlowUp.
+
+--- FACE DETECTION & AI ---
+
+21. justadudewhohacks/face-api.js  ⭐ 17,850
+    URL: https://github.com/justadudewhohacks/face-api.js
+    WHAT IT DOES: JavaScript API for face detection and recognition in
+    the browser and Node.js — built on TensorFlow.js. Detects faces,
+    landmarks, age, emotion, and gender.
+    WHY IT'S USEFUL: This IS the library in your GlowUp project. Deep
+    dive the models and config options here.
+
+--- AI AGENTS & CLAUDE ---
+
+22. ghostwright/phantom  ⭐ 1,422
+    URL: https://github.com/ghostwright/phantom
+    WHAT IT DOES: An AI co-worker with its own computer — self-evolving,
+    persistent memory, MCP server, secure credential collection, email
+    identity. Built on the Claude Agent SDK.
+    WHY IT'S USEFUL: Inspiration for adding an AI coach feature to GlowUp
+    that remembers your goals and gives personalized advice.
+
+========================================================
+  SUMMARY TABLE
+========================================================
+
+ #  | Repo                              | Stars   | Category
+----|-----------------------------------|---------|------------------
+ 1  | shadcn-ui/ui                      | 114,875 | UI Components
+ 2  | tailwindlabs/tailwindcss          |  95,091 | CSS Framework
+ 3  | pmndrs/zustand                    |  58,095 | State Management
+ 4  | TanStack/query                    |  49,489 | Data Fetching
+ 5  | prisma/prisma                     |  46,007 | ORM / Database
+ 6  | react-hook-form/react-hook-form   |  44,725 | Forms
+ 7  | colinhacks/zod                    |  42,751 | Validation
+ 8  | atlassian/react-beautiful-dnd     |  33,998 | Drag & Drop
+ 9  | nextauthjs/next-auth              |  28,243 | Authentication
+10  | t3-oss/create-t3-app              |  28,935 | Starter / Boilerplate
+11  | recharts/recharts                 |  27,157 | Charts
+12  | lucide-icons/lucide               |  22,709 | Icons
+13  | birobirobiro/awesome-shadcn-ui    |  19,593 | Resources List
+14  | shadcn-ui/taxonomy                |  19,231 | Reference App
+15  | clauderic/dnd-kit                 |  17,148 | Drag & Drop
+16  | justadudewhohacks/face-api.js     |  17,850 | Face Recognition
+17  | tailwindcss-typography            |   6,376 | CSS Plugin
+18  | prettier-plugin-tailwindcss       |   7,083 | Developer Tools
+19  | tsparticles/tsparticles           |   8,836 | Animations
+20  | ixartz/SaaS-Boilerplate           |   7,105 | Starter / Boilerplate
+21  | catdad/canvas-confetti            |  12,582 | Animations
+22  | ghostwright/phantom               |   1,422 | AI / Claude SDK
+
+========================================================
+  NOTE ON OBSIDIAN
+========================================================
+A companion Markdown file (useful-github-repos.md) is saved
+alongside this file — ready to copy into your Obsidian vault.
+========================================================
